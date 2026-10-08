@@ -18,6 +18,7 @@ header h1{margin:0;font-size:18px}
 header .sub{color:var(--mut);font-size:13px}
 main{padding:12px 12px calc(120px + env(safe-area-inset-bottom))}
 .card{background:var(--card);border-radius:14px;padding:14px;margin-bottom:12px}
+.card.today{box-shadow:inset 0 0 0 2px var(--acc)}
 h2{font-size:17px;margin:0 0 8px}
 h3{font-size:15px;margin:14px 0 6px}
 p{margin:6px 0}
@@ -66,6 +67,10 @@ details{background:var(--card);border-radius:12px;margin-bottom:8px;padding:0 14
 summary{padding:13px 0;font-weight:600;list-style:none}
 summary::-webkit-details-marker{display:none}
 details[open]{padding-bottom:12px}
+.tl{display:grid;grid-template-columns:92px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.tl.tr b{color:var(--acc)}
+.exl{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.exl:last-child{border-bottom:0}
 </style>
 </head>
 <body>
@@ -75,6 +80,7 @@ details[open]{padding-bottom:12px}
 <div id="modal"><div class="sheet" id="sheet"></div></div>
 <nav class="tabbar" id="tabs">
 <button data-tab="home"><span>🏠</span>Heute</button>
+<button data-tab="plan"><span>📋</span>Plan</button>
 <button data-tab="lib"><span>📖</span>Übungen</button>
 <button data-tab="weight"><span>⚖️</span>Gewicht</button>
 <button data-tab="checkin"><span>📝</span>Check-in</button>
@@ -82,13 +88,15 @@ details[open]{padding-bottom:12px}
 </nav>
 <script>
 'use strict';
-const APP_VERSION='1.0';
+const APP_VERSION='1.1';
 const START='2026-10-12';
 const KEY='trainingData_v1';
 const DAYPLAN={1:'OKA',2:'UKA',4:'OKB',6:'UKB',0:'SWIM'};
+const DN=['So','Mo','Di','Mi','Do','Fr','Sa'];
+const WEEK=[[1,'ca. 10:00'],[2,'15:30–16:45'],[3,'Pause – voller Unitag'],[4,'15:00–16:15'],[5,'Pause – voller Unitag'],[6,'vormittags'],[0,'nachmittags/abends · danach Check-in']];
 const EFFL={leicht:'Leicht<br><small>4+ übrig</small>',passend:'Passend<br><small>1–3 übrig</small>',hart:'Hart<br><small>0 übrig</small>'};
 const DAILY=[
- {id:'kreatin',name:'Kreatin',sub:'3–5 g, egal wann'},
+ {id:'kreatin',name:'Kreatin',sub:'1 Beutel (3 g), egal wann'},
  {id:'shake',name:'Proteinshake',sub:'nach dem Training oder als Snack'},
  {id:'spaet',name:'Spätmahlzeit',sub:'ca. 21 Uhr – nicht hungrig ins Bett'},
  {id:'haltung',name:'Haltungs-Checks',sub:'mehrmals bewusst aufgerichtet (z. B. bei Garmin-Bewegungsalarm)'}
@@ -107,7 +115,7 @@ const RULES=[
 ];
 const WARM={
  rudern:{name:'Rudergerät',dose:'5 min locker',steps:['Füße fest in die Schlaufen, Widerstand niedrig bis mittel (Stufe 3–5).','Zug: erst Beine strecken, dann Oberkörper leicht zurück, dann Griff zum unteren Brustbein ziehen.','Zurück in umgekehrter Reihenfolge: Arme, Oberkörper, dann Beine beugen.','Tempo so, dass du dich noch unterhalten könntest.'],cues:['Aufrecht sitzen, Brust stolz','Schultern unten lassen']},
- pullapart:{name:'Band Pull-Aparts',dose:'2 × 15',steps:['Band schulterbreit greifen, Arme vor der Brust auf Schulterhöhe, fast gestreckt.','Band auseinanderziehen, bis es fast die Brust berührt – Schulterblätter zusammen.','1 Sekunde halten, langsam zurück.','Ohne Band: Reverse-Butterfly-Maschine, sehr leicht, 15 Wdh.'],cues:['Schultern weg von den Ohren','Kein Hohlkreuz – Bauch leicht fest','Leichtes Band wählen']},
+ pullapart:{name:'Band Pull-Aparts',dose:'2 × 15',steps:['Band schulterbreit greifen, Arme vor der Brust auf Schulterhöhe, fast gestreckt.','Band auseinanderziehen, bis es fast die Brust berührt – Schulterblätter zusammen.','1 Sekunde halten, langsam zurück.','Ohne Band: Reverse-Butterfly-Maschine, sehr leicht, 15 Wdh.'],cues:['Schultern weg von den Ohren','Kein Hohlkreuz – Bauch leicht fest','Leichtes Band wählen (gelb)']},
  wallslide:{name:'Wall Slides',dose:'2 × 10',steps:['Mit dem Rücken an die Wand, Füße ca. 20 cm davor, Knie leicht gebeugt.','Hinterkopf, oberer Rücken und Po an der Wand; Rippen runter, unterer Rücken flach.','Arme in U-Form („Kaktus") an die Wand, Ellbogen auf Schulterhöhe.','Arme langsam nach oben schieben, nur so weit, wie alles an der Wand bleibt, dann zurück.'],cues:['Lieber kleine Bewegung, dafür sauber','Ruhig ausatmen beim Hochschieben']},
  openbook:{name:'Open Book (Brustwirbelsäule)',dose:'2 × 8 pro Seite',steps:['Seitlage, Knie 90° angewinkelt aufeinander, Kopf auf Arm oder Handtuch.','Arme gestreckt nach vorn, Handflächen aufeinander.','Oberen Arm wie ein Buch in einem Bogen zur anderen Seite öffnen, Blick folgt der Hand.','In der Endposition ausatmen, 2 s halten, zurück.'],cues:['Knie bleiben aufeinander – die Drehung kommt aus dem oberen Rücken','Nur so weit, wie es angenehm dehnt']},
  hueftbeuger:{name:'Hüftbeuger-Dehnung',dose:'2 × 45 s pro Seite',steps:['Halbkniestand: hinteres Knie auf einer Matte, vorderer Fuß aufgestellt.','Po des hinteren Beins fest anspannen und das Becken leicht einrollen (Steißbein nach unten).','Hüfte ein kleines Stück nach vorn schieben, bis du vorn an der Hüfte des hinteren Beins eine Dehnung spürst.','Arm der hinteren Seite nach oben strecken, Oberkörper aufrecht, ruhig atmen.'],cues:['Kein Hohlkreuz – die Dehnung kommt vom Becken-Einrollen, nicht vom Nach-vorn-Lehnen','Wirkt dem vielen Sitzen und Radfahren entgegen']}
@@ -195,12 +203,12 @@ const EX={
   easier:'Nur die Beine bewegen, Arme bleiben oben.',harder:'Leichte Kurzhanteln in den Händen.'},
  klimmzug:{name:'Klimmzug-Training',en:'band assisted pull up / negative pull up',sets:3,reps:[3,6],rl:'Wdh',wt:'text',wl:'Variante',rest:120,
   muscles:'Breiter Rücken, Bizeps, Griffkraft – dein Meilenstein',
-  setup:['Variante wählen: (1) Klimmzug-Maschine mit Gegengewicht, (2) Widerstandsband über die Stange, Knie oder Fuß in die Schlaufe, (3) Negativ: von einer Box hochsteigen und nur langsam ablassen.','Griff etwas breiter als schulterbreit, Handflächen nach vorn. Handflächen zu dir (Chin-up) ist etwas leichter.','Ins Feld „Variante" schreibst du z. B. „Maschine 30 kg Hilfe", „Band rot" oder „Negativ 5 s".'],
+  setup:['Variante wählen: (1) Klimmzug-Maschine mit Gegengewicht, (2) Widerstandsband über die Stange, Knie oder Fuß in die Schlaufe (lila und/oder schwarz), (3) Negativ: von einer Box hochsteigen und nur langsam ablassen.','Griff etwas breiter als schulterbreit, Handflächen nach vorn. Handflächen zu dir (Chin-up) ist etwas leichter.','Ins Feld „Variante" schreibst du z. B. „Maschine 30 kg Hilfe", „Band lila" oder „Negativ 5 s".'],
   steps:['Mit gestreckten Armen hängen, dann die Schultern aktiv nach unten ziehen.','Brust Richtung Stange ziehen, Ellbogen Richtung Hüfte, bis das Kinn über der Stange ist.','Langsam ablassen (2–3 s, bei Negativen 4–5 s), bis die Arme gestreckt sind.'],
   cues:['Erst Schultern runter, dann ziehen','Bauch und Po fest, Beine leicht vorn','Kein Schwingen'],
   errors:['Mit Schwung hochkicken','Nur halbe Bewegung','Schultern bleiben oben an den Ohren hängen'],
   stop:'Schmerz im Ellbogen oder in der Schulter: mehr Unterstützung, Griff mit Handflächen zu dir.',
-  easier:'Mehr Gegengewicht oder dickeres Band.',harder:'Weniger Hilfe – Ziel: der erste Klimmzug ohne Hilfe.'},
+  easier:'Mehr Gegengewicht oder stärkeres Band (lila + schwarz zusammen).',harder:'Weniger Hilfe – Ziel: der erste Klimmzug ohne Hilfe.'},
  schraeg_kh:{name:'Schrägbank-Kurzhanteldrücken',en:'incline dumbbell press 30 degree form',sets:3,reps:[8,12],rl:'Wdh',wt:'num',wl:'kg je Hantel',rest:120,
   muscles:'Obere Brust, vordere Schulter – macht die Brust oben voller',
   setup:['Bank auf ca. 30° einstellen (nicht steiler, sonst wird es eine Schulterübung).','Hanteln auf die Oberschenkel, mit Knie-Kick in Position wie beim Flachbankdrücken.','Schulterblätter zusammen und nach unten, Füße fest.'],
@@ -307,7 +315,7 @@ const EX={
   easier:'Hände erhöht (Bett, Tisch).',harder:'Füße erhöht oder 3 s absenken.'},
  band_rudern:{name:'Rudern mit Band (sitzend)',en:'seated resistance band row',sets:3,reps:[12,15],rl:'Wdh',wt:'text',wl:'Band',rest:60,
   muscles:'Oberer Rücken – Haltungsarbeit unterwegs',
-  setup:['Auf den Boden setzen, Beine gestreckt, Band mittig um die Fußsohlen.','Enden greifen, aufrecht sitzen.'],
+  setup:['Auf den Boden setzen, Beine gestreckt, Band mittig um die Fußsohlen (rot passt meist gut).','Enden greifen, aufrecht sitzen.'],
   steps:['Schulterblätter zusammen, dann Ellbogen nah am Körper nach hinten ziehen.','1–2 Sekunden halten.','Langsam zurück.'],
   cues:['Aufrecht sitzen, nicht nach hinten lehnen','Schultern unten'],
   errors:['Rundrücken','Mit dem Oberkörper ziehen'],
@@ -366,7 +374,7 @@ function phase(w){if(w===0)return 'Vorbereitung: Technik kennenlernen, ganz leic
 function blank(){return {schema:1,startDate:START,sessions:[],weights:[],checkins:[],daily:{},draft:null}}
 function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&Array.isArray(d.sessions))return Object.assign(blank(),d)}catch(e){}return blank()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){alert('Speichern fehlgeschlagen: '+e.message)}}
-let data=load(),view='home',checkinWeek=null;
+let data=load(),view='home',checkinWeek=null,planDay=null;
 
 function lastPerf(id){for(let i=data.sessions.length-1;i>=0;i--){const s=data.sessions[i];if(!s.exercises)continue;const e=s.exercises.find(x=>x.id===id);if(e&&e.sets.length)return Object.assign({date:s.date},e)}return null}
 function fmtSet(ex,s){return ((ex.wt!=='none'&&s.w!==null&&s.w!==''&&s.w!==undefined)?s.w+(ex.wt==='num'?' kg':'')+' × ':'')+s.r}
@@ -387,7 +395,7 @@ function getCheckin(w){let c=data.checkins.find(x=>x.week===w);if(!c){c={week:w}
 // ---------- Ansichten ----------
 function setHead(t,s){$('#title').textContent=t;$('#sub').textContent=s}
 function go(v){view=v;render();window.scrollTo(0,0)}
-function render(){document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===view||(view==='workout'&&b.dataset.tab==='home')));({home:rHome,workout:rWorkout,lib:rLib,weight:rWeight,checkin:rCheckin,data:rData})[view]()}
+function render(){document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===view||(view==='workout'&&b.dataset.tab==='home')));({home:rHome,plan:rPlan,workout:rWorkout,lib:rLib,weight:rWeight,checkin:rCheckin,data:rData})[view]()}
 
 function rHome(){const t=today(),w=weekOf(t),dow=new Date().getDay();
  setHead('Heute',fmtDate(t)+' · '+(w?'Woche '+w+' von 12':'Vor dem Start (12.10.)'));
@@ -407,6 +415,30 @@ function rHome(){const t=today(),w=weekOf(t),dow=new Date().getDay();
  h+=`<div class="card"><h2>Andere Einheit wählen</h2><div class="mut">Für verschobene Tage, Reisewochen oder das Hotel.</div>${Object.keys(SESSIONS).map(k=>`<button class="btn" data-act="start" data-k="${k}">${SESSIONS[k].name}</button>`).join('')}</div>`;
  app.innerHTML=h}
 
+// ---------- Plan ----------
+function dayType(dow){return (dow===1||dow===6)?'am':((dow===2||dow===4)?'pm':'rest')}
+function mealsFor(dow){const ty=dayType(dow),S=SESSIONS[DAYPLAN[dow]],L=[],shake=['nach dem Training','Proteinshake','1 Messlöffel Whey (ca. 30 g) mit Milch.'];
+ L.push(['ca. 7:30','Frühstück','Joghurt, Haferflocken, Banane, Nüsse oder Erdnussbutter + 2–3 Eier (Teeeier 茶叶蛋 oder Mensa-Frühstück). Dazu 1 Beutel Kreatin.']);
+ if(ty==='am'){L.push(['ca. 10:00','🏋️ Training',S.name,1]);L.push(shake)}
+ L.push(['12:00','Mensa Mittag','2 Proteinportionen (Fleisch, Tofu oder 番茄炒蛋), Gemüse, Reis nach Hunger.']);
+ if(ty==='pm'){L.push(['ca. 14:45','Snack vor dem Training','Banane, Joghurt oder ein Baozi.']);L.push([dow===2?'15:30':'15:00','🏋️ Training',S.name,1]);L.push(shake)}
+ if(dow===0)L.push(['nachmittags','🏊 Schwimmen','Locker, danach Check-in.',1]);
+ L.push(['18:00','Mensa Abend','Wie mittags. Eine zweite Portion to go für später mitnehmen.'+(dow===3?' Heute Vorlesung bis 21 Uhr – Spätmahlzeit unbedingt mitnehmen.':'')]);
+ L.push(['ca. 21:00–21:30','Spätmahlzeit',ty==='rest'?'Mensa-Portion to go oder Joghurt mit Haferflocken – oder heute den Shake (Whey mit Milch).':'Mensa-Portion to go oder Joghurt mit Haferflocken.']);
+ return L}
+function rPlan(){const td=new Date().getDay(),d=planDay===null?td:planDay;setHead('Plan','Ernährung pro Tag · Training pro Woche');
+ let h=`<div class="card"><h2>🍽️ Ernährung</h2><div class="seg">${[1,2,3,4,5,6,0].map(n=>`<button class="${n===d?'on':''}" data-act="pday" data-v="${n}">${DN[n]}</button>`).join('')}</div><div class="mut" style="margin-top:8px">${d===td?'Heute':DN[d]} · ${dayType(d)==='rest'?'Ruhetag':'Trainingstag'}</div>`;
+ h+=mealsFor(d).map(m=>`<div class="tl${m[3]?' tr':''}"><div class="mut">${m[0]}</div><div><b>${m[1]}</b><div class="mut">${m[2]}</div></div></div>`).join('');
+ h+=`<h3>Grundregeln</h3><ul><li>2 Proteinportionen bei jeder Mensa-Mahlzeit.</li><li>Nie hungrig ins Bett – die Spätmahlzeit ist dein wichtigster Hebel zum Zunehmen.</li><li>Kreatin jeden Tag, egal wann.</li><li>Die Waage entscheidet: Steigt der Wochenschnitt 2 Wochen lang um weniger als 0,2 kg, kommt ein Snack dazu.</li></ul></div>`;
+ h+=`<div class="card"><h2>🏋️ Training pro Woche</h2><div class="mut">Woche 1–2: nur 2 Sätze pro Übung, bewusst leicht. Tipp auf eine Übung für die Anleitung.</div></div>`;
+ WEEK.forEach(([dw,time])=>{const k=DAYPLAN[dw],S=k?SESSIONS[k]:null;
+  h+=`<div class="card${dw===td?' today':''}"><div class="exhead"><h2>${DN[dw]} · ${S?S.name:'Ruhetag'}</h2>${dw===td?'<span class="pill" style="color:var(--acc)">heute</span>':''}</div><div class="mut">${time}${S&&!S.swim?' · '+S.focus:''}</div>`;
+  if(S&&S.ex)h+=S.ex.map(id=>`<div class="exl" data-act="info" data-id="${id}"><span>${EX[id].name}</span><span class="mut">${EX[id].sets}×${EX[id].reps[0]}–${EX[id].reps[1]} ${EX[id].rl} ›</span></div>`).join('');
+  if(S&&S.swim)h+=`<div class="mut" style="margin-top:6px">${S.focus}.</div>`;
+  h+='</div>'});
+ h+=`<div class="card"><h2>✈️ Reisewoche</h2><div class="mut">Di und Do je „Ganzkörper (Reisewoche)", unterwegs „Hotel-Workout". Beides unter Heute → Andere Einheit wählen.</div></div>`;
+ app.innerHTML=h}
+
 function startSession(key,short){const S=SESSIONS[key],w=weekOf(today());
  if(S.swim){data.draft={key,date:today(),start:Date.now(),swim:true,min:'',dist:'',feel:'',notes:''};save();go('workout');return}
  let ids=S.ex.slice();if(short)ids=ids.slice(0,3);
@@ -424,7 +456,7 @@ function rWorkout(){const d=data.draft;if(!d){go('home');return}const S=SESSIONS
  d.ex.forEach((e,i)=>{const ex=EX[e.id];
   h+=`<div class="card"><div class="exhead"><div><h2>${ex.name}</h2><div class="mut">${e.sets.length} × ${ex.reps[0]}–${ex.reps[1]} ${ex.rl} · Pause ${ex.rest} s</div></div><button class="btn sm" data-act="info" data-id="${e.id}">Anleitung</button></div><div class="hint">${hint(e.id)}</div>`;
   h+=`<div class="set"><div class="mut">Satz</div><div class="mut" style="text-align:center">${ex.wl}</div><div class="mut" style="text-align:center">${ex.rl}</div><div></div></div>`;
-  e.sets.forEach((s,j)=>{h+=`<div class="set ${s.done?'done':''}" id="s${i}_${j}"><div class="mut">${j+1}</div>${ex.wt==='none'?'<div class="mut" style="text-align:center">–</div>':`<input ${ex.wt==='num'?'inputmode="decimal" placeholder="kg"':'placeholder="z. B. Band rot"'} data-f="w" data-e="${i}" data-s="${j}" value="${esc(s.w)}">`}<input inputmode="numeric" data-f="r" data-e="${i}" data-s="${j}" value="${esc(s.r)}" placeholder="${ex.reps[0]}–${ex.reps[1]}"><button class="ok" data-act="done" data-e="${i}" data-s="${j}">✓</button></div>`});
+  e.sets.forEach((s,j)=>{h+=`<div class="set ${s.done?'done':''}" id="s${i}_${j}"><div class="mut">${j+1}</div>${ex.wt==='none'?'<div class="mut" style="text-align:center">–</div>':`<input ${ex.wt==='num'?'inputmode="decimal" placeholder="kg"':'placeholder="z. B. Band lila"'} data-f="w" data-e="${i}" data-s="${j}" value="${esc(s.w)}">`}<input inputmode="numeric" data-f="r" data-e="${i}" data-s="${j}" value="${esc(s.r)}" placeholder="${ex.reps[0]}–${ex.reps[1]}"><button class="ok" data-act="done" data-e="${i}" data-s="${j}">✓</button></div>`});
   h+=`<div class="row" style="justify-content:space-between;margin-top:4px"><button class="btn sm" data-act="addset" data-e="${i}">+ Satz</button><button class="btn sm" data-act="timer" data-sec="${ex.rest}">⏱ Pause ${ex.rest} s</button></div>`;
   h+=`<div class="mut" style="margin-top:10px">Wie schwer war die Übung?</div><div class="seg">${['leicht','passend','hart'].map(k=>`<button class="${e.effort===k?'on':''}" data-act="eff" data-e="${i}" data-v="${k}">${EFFL[k]}</button>`).join('')}</div></div>`});
  if(S.end&&S.end.length)h+=`<div class="card"><h2>Zum Schluss</h2>${S.end.map(id=>chkRow(id,WARM[id],d.warm[id])).join('')}</div>`;
@@ -466,7 +498,7 @@ function rCheckin(){const w=curCW();setHead('Check-in','Jeden Sonntag · danach 
  let h=`<div class="card"><div class="row"><button class="btn sm" data-act="cw" data-v="-1">‹</button><div style="flex:1;text-align:center;font-weight:700">${w===0?'Vor Start':'Woche '+w}</div><button class="btn sm" data-act="cw" data-v="1">›</button></div><h3>Automatisch erfasst</h3><div>Krafteinheiten: <b>${str}/4</b> · Schwimmen: <b>${sw}</b></div><div>Ø Gewicht: <b>${cur?cur.avg.toFixed(1)+' kg':'–'}</b>${cur&&prev?' ('+(cur.avg-prev.avg>0?'+':'')+(cur.avg-prev.avg).toFixed(1)+' kg)':''}</div><div class="mut">Kreatin ${dc.kreatin}/7 · Shake ${dc.shake}/7 · Spätmahlzeit ${dc.spaet}/7 · Haltung ${dc.haltung}/7</div></div>`;
  h+=`<div class="card"><h2>Garmin (Wochenschnitt)</h2><div class="mut">Garmin Connect → Gesundheitsstatistiken → 7-Tage-Durchschnitt</div><div class="grid2">${fld('hrv','HRV Ø (ms)',c.hrv)}${fld('sleep','Schlaf Ø (h)',c.sleep)}${fld('rhr','Ruhepuls Ø',c.rhr)}${fld('steps','Schritte Ø',c.steps)}</div></div>`;
  h+=`<div class="card"><h2>Wie war die Woche? (1–5)</h2>${scale('energy','Energie',c.energy)}${scale('appetite','Essen geschafft / Appetit',c.appetite)}${scale('motivation','Spaß / Motivation',c.motivation)}${scale('posture','Haltung im Alltag',c.posture)}${scale('soreness','Muskelkater / Erschöpfung (5 = stark)',c.soreness)}</div>`;
- h+=`<div class="card"><h2>Fotos & Maße ${due?'<span class="pill" style="color:#fbbf24">diese Woche fällig</span>':''}</h2><div class="mut">Start, W4, W8, W12. Morgens, gleiches Licht, Stativ auf Hüfthöhe: vorn, seitlich, hinten – jeweils entspannt (vorher auf der Stelle gehen, ausatmen, Arme hängen lassen) und bewusst aufgerichtet. Dazu ein 15-min-Schreibtischvideo von der Seite, Standbild bei Minute 10.</div><div class="chk"><div class="box ${c.photos?'on':''}" data-act="ctoggle" data-id="photos">${c.photos?'✓':''}</div><div>Fotos gemacht</div></div><div class="chk"><div class="box ${c.deskvideo?'on':''}" data-act="ctoggle" data-id="deskvideo">${c.deskvideo?'✓':''}</div><div>Schreibtischvideo gemacht</div></div><div class="grid2">${fld('chest','Brust (cm)',c.chest)}${fld('arm','Oberarm angespannt (cm)',c.arm)}${fld('waist','Taille, Nabelhöhe (cm)',c.waist)}</div></div>`;
+ h+=`<div class="card"><h2>Fotos & Maße ${due?'<span class="pill" style="color:#fbbf24">diese Woche fällig</span>':''}</h2><div class="mut">Start, W4, W8, W12. Morgens, gleiches Licht, Handy auf Hüfthöhe: vorn, seitlich, hinten – jeweils entspannt (vorher auf der Stelle gehen, ausatmen, Arme hängen lassen) und bewusst aufgerichtet. Dazu ein 15-min-Schreibtischvideo von der Seite, Standbild bei Minute 10.</div><div class="chk"><div class="box ${c.photos?'on':''}" data-act="ctoggle" data-id="photos">${c.photos?'✓':''}</div><div>Fotos gemacht</div></div><div class="chk"><div class="box ${c.deskvideo?'on':''}" data-act="ctoggle" data-id="deskvideo">${c.deskvideo?'✓':''}</div><div>Schreibtischvideo gemacht</div></div><div class="grid2">${fld('chest','Brust (cm)',c.chest)}${fld('arm','Oberarm angespannt (cm)',c.arm)}${fld('waist','Taille, Nabelhöhe (cm)',c.waist)}</div></div>`;
  h+=`<div class="card"><h2>Notizen & Fragen</h2><label class="f">Beschwerden / Schmerzen</label><textarea id="c_pain">${esc(c.pain)}</textarea><label class="f">Was lief gut, was nicht? Fragen an den Coach</label><textarea id="c_notes">${esc(c.notes)}</textarea><label class="f">Reisen / Termine in den nächsten 2 Wochen</label><textarea id="c_travel">${esc(c.travel)}</textarea><button class="btn pri" data-act="csave">Check-in speichern</button><button class="btn" data-act="tab" data-v="data">Weiter zum Export →</button></div>`;
  app.innerHTML=h}
 
@@ -495,13 +527,14 @@ function stopTimer(){clearInterval(tIv);$('#timer').classList.remove('show')}
 
 // ---------- Events ----------
 document.addEventListener('click',ev=>{
- const tb=ev.target.closest('[data-tab]');if(tb){checkinWeek=null;go(tb.dataset.tab);return}
+ const tb=ev.target.closest('[data-tab]');if(tb){checkinWeek=null;planDay=null;go(tb.dataset.tab);return}
  if(ev.target.id==='modal'){closeModal();return}
  const t=ev.target.closest('[data-act]');if(!t)return;const a=t.dataset.act,d=data.draft;
  const segOn=()=>t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t));
  switch(a){
   case 'start':if(d&&!confirm('Es läuft noch ein Training. Verwerfen und neu starten?'))return;startSession(t.dataset.k,!!t.dataset.short);break;
   case 'resume':go('workout');break;
+  case 'pday':planDay=+t.dataset.v;rPlan();break;
   case 'done':{const e=+t.dataset.e,s=+t.dataset.s,set=d.ex[e].sets[s];if(!set.done&&num(set.r)===null){alert('Bitte Wiederholungen eintragen.');return}set.done=!set.done;save();document.getElementById('s'+e+'_'+s).classList.toggle('done',set.done);if(set.done)startTimer(EX[d.ex[e].id].rest);break}
   case 'addset':{const e=d.ex[+t.dataset.e],l=e.sets[e.sets.length-1]||{w:'',r:''};e.sets.push({w:l.w,r:l.r,done:false});save();rWorkout();break}
   case 'eff':d.ex[+t.dataset.e].effort=t.dataset.v;save();segOn();break;
