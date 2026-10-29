@@ -88,28 +88,30 @@ details[open]{padding-bottom:12px}
 </nav>
 <script>
 'use strict';
-const APP_VERSION='1.2';
+const APP_VERSION='1.3';
 const START='2026-10-12';
 const KEY='trainingData_v1';
 const DAYPLAN={1:'OKA',2:'UKA',4:'OKB',6:'UKB',0:'SWIM'};
 const DN=['So','Mo','Di','Mi','Do','Fr','Sa'];
 const WEEK=[[1,'ca. 10:00'],[2,'15:30–16:45'],[3,'Pause – voller Unitag'],[4,'15:00–16:15'],[5,'Pause – voller Unitag'],[6,'vormittags'],[0,'nachmittags/abends · danach Check-in']];
 const EFFL={leicht:'Leicht<br><small>4+ übrig</small>',passend:'Passend<br><small>1–3 übrig</small>',hart:'Hart<br><small>0 übrig</small>'};
+const BURN='🔥 Brennen ist der Startschuss, nicht das Ziel: danach noch 3–5 saubere Wdh. Stopp erst, wenn das Tempo langsam wird oder die Technik bricht.';
 const DAILY=[
  {id:'kreatin',name:'Kreatin',sub:'1 Beutel (3 g), egal wann'},
  {id:'shake',name:'Proteinshake',sub:'nach dem Training oder als Snack'},
- {id:'spaet',name:'Spätmahlzeit',sub:'ca. 21 Uhr – nicht hungrig ins Bett'},
+ {id:'spaet',name:'Spätmahlzeit',sub:'ca. 21 Uhr – an Ruhetagen nur klein (Joghurt oder Shake) und nur bei Hunger'},
  {id:'haltung',name:'Haltungs-Checks',sub:'mehrmals bewusst aufgerichtet (z. B. bei Garmin-Bewegungsalarm)'}
 ];
 const RULES=[
  ['Anstrengung vs. Schmerz','Brennen im Muskel, schwere Arme und Muskelkater am nächsten Tag sind normal. Für Gelenke gilt die <b>Schmerz-Ampel</b>:<br>🟢 Leichtes Ziehen bis ca. 2 von 10, das im Training nicht schlimmer wird und am nächsten Morgen weg ist: weitermachen.<br>🟡 3–5 von 10: Übung leichter machen oder heute weglassen.<br>🔴 Stechend, über 5 oder am nächsten Tag schlimmer, Taubheit oder Kribbeln: <b>sofort stoppen</b>, im Check-in notieren.'],
- ['Wie schwer? Die 1–3-Regel','Ein Satz ist richtig, wenn du am Ende noch <b>1–3 saubere Wiederholungen</b> schaffen würdest. Bis zum Versagen musst du nie gehen. Sobald die Technik schlechter wird, ist der Satz vorbei – egal, was die Zahl sagt.<br><b>Faustregel:</b> Fällt der nächste Satz mit gleichem Gewicht um 3 oder mehr Wiederholungen ab, war der vorige zu schwer – beim nächsten Mal leichter.'],
- ['Gewicht steigern','Jede Übung hat einen Bereich, z. B. 8–12 Wdh. Starte mit einem Gewicht, bei dem du ca. 8 schaffst, und versuche jedes Mal 1 Wdh mehr. Schaffst du in allen Sätzen das obere Ende und es war nicht „hart", nimmst du beim nächsten Mal den kleinsten Gewichtsschritt (1–2 kg bei Kurzhanteln) und startest wieder unten im Bereich. Die App zeigt dir das als Hinweis. Muskeln passen sich schneller an als Sehnen und Gelenke – große Sprünge spüren zuerst die Gelenke.'],
+ ['Wie schwer? Die 1–3-Regel','Ein Satz ist richtig, wenn du am Ende noch <b>1–3 saubere Wiederholungen</b> schaffen würdest. Bis zum Versagen musst du nie gehen – <b>„hart" ist die Ausnahme, Ziel im Log ist „passend"</b>. Bei Bankdrücken, Kniebeugen, Kreuzheben und Rudern: Satz beenden, wenn noch 2 gehen würden. Sobald die Technik schlechter wird, ist der Satz vorbei – egal, was die Zahl sagt.<br><b>Faustregel:</b> Fällt der nächste Satz mit gleichem Gewicht um 3 oder mehr Wiederholungen ab, war der vorige zu schwer oder zu nah am Versagen.'],
+ ['Brennen ist kein Stoppsignal','<b>Das Brennen ist der Startschuss, nicht das Ziel.</b> Bei kleinen Übungen (Bauch, Seitheben, Curls, Trizeps, Face Pulls, Flys) nach dem Einsetzen des Brennens noch 3–5 saubere Wiederholungen weitermachen und ruhig ausatmen. Echte Stoppsignale: Das Tempo wird langsam, obwohl du dich voll anstrengst, die Bewegung wird kürzer oder die Technik bricht.<br>Bei den großen Übungen ist es umgekehrt: dort lieber früher aufhören.'],
+ ['Gewicht steigern','Jede Übung hat einen Bereich, z. B. 8–12 Wdh. Starte mit einem Gewicht, bei dem du ca. 8 schaffst, und versuche jedes Mal 1 Wdh mehr. Schaffst du in allen Sätzen das obere Ende und es war nicht „hart", nimmst du beim nächsten Mal den kleinsten Gewichtsschritt und startest wieder unten im Bereich. Die App zeigt dir das als Hinweis.<br>Pro Einheit <b>höchstens ein</b> kleinster Schritt (Kurzhanteln 1–2 kg, Kabel/Maschine 5 kg) – nie zwei auf einmal. Muskeln passen sich schneller an als Sehnen, Gelenke und der Rücken.'],
  ['Aufwärmsätze','Vor der ersten großen Übung des Tages: 1–2 Sätze mit etwa der Hälfte des Gewichts und 8–10 lockeren Wdh. Die zählen nicht und werden nicht eingetragen.'],
  ['Atmung & Rumpfspannung','Vor jeder Wiederholung einatmen und den Bauch fest machen, als würde gleich jemand hineinstupsen. Im anstrengenden Teil kontrolliert ausatmen. Nicht lange die Luft anhalten.'],
  ['Tempo','Kontrolliert: ca. 2 Sekunden runter oder zurück, 1 Sekunde hoch. Kein Schwung, nichts fallen lassen. Langsam ist sicherer und baut mehr Muskeln auf.'],
  ['Kurzhanteln sicher handhaben','Zum Bankdrücken: Hanteln auf die Oberschenkel stellen, hinsetzen, beim Zurücklegen mit den Knien nach oben „kicken". Zum Ablegen Hanteln zur Brust holen, Knie anziehen, Hanteln auf die Oberschenkel setzen und mit Schwung aufsitzen. Nur Gewichte, die du sicher kontrollierst. Handgelenke beim Drücken immer gerade.'],
- ['Die ersten Wochen','Woche 1–2: 2 Sätze pro Übung, bewusst leicht, Technik lernen. Muskelkater ist am Anfang normal und wird nach 1–2 Wochen deutlich weniger.'],
+ ['Ab Woche 3','3 Sätze pro Übung. Steigern nach der Regel, „passend" statt „hart". Nicht abgehakte Übungen (z. B. Beinbeuger, wenn die Maschine kaputt ist) werden einfach nicht gespeichert.'],
  ['Filmen für den Coach','Handy seitlich auf Hüfthöhe, 2–3 m Abstand, ganzer Körper im Bild. Am wichtigsten bei Goblet Squat, Rumänischem Kreuzheben, Bankdrücken und Rudern.'],
  ['Wenn du unsicher bist','Gewicht reduzieren oder die leichtere Variante nehmen. Ein ausgelassener Satz kostet nichts, eine Verletzung kostet Wochen.']
 ];
@@ -118,10 +120,10 @@ const WARM={
  pullapart:{name:'Band Pull-Aparts',dose:'2 × 15',steps:['Band schulterbreit greifen, Arme vor der Brust auf Schulterhöhe, fast gestreckt.','Band auseinanderziehen, bis es fast die Brust berührt – Schulterblätter zusammen.','1 Sekunde halten, langsam zurück.','Ohne Band: Reverse-Butterfly-Maschine, sehr leicht, 15 Wdh.'],cues:['Schultern weg von den Ohren','Kein Hohlkreuz – Bauch leicht fest','Leichtes Band wählen (gelb)']},
  wallslide:{name:'Wall Slides',dose:'2 × 10',steps:['Mit dem Rücken an die Wand, Füße ca. 20 cm davor, Knie leicht gebeugt.','Hinterkopf, oberer Rücken und Po an der Wand; Rippen runter, unterer Rücken flach.','Arme in U-Form („Kaktus") an die Wand, Ellbogen auf Schulterhöhe.','Arme langsam nach oben schieben, nur so weit, wie alles an der Wand bleibt, dann zurück.'],cues:['Lieber kleine Bewegung, dafür sauber','Ruhig ausatmen beim Hochschieben']},
  openbook:{name:'Open Book (Brustwirbelsäule)',dose:'2 × 8 pro Seite',steps:['Seitlage, Knie 90° angewinkelt aufeinander, Kopf auf Arm oder Handtuch.','Arme gestreckt nach vorn, Handflächen aufeinander.','Oberen Arm wie ein Buch in einem Bogen zur anderen Seite öffnen, Blick folgt der Hand.','In der Endposition ausatmen, 2 s halten, zurück.'],cues:['Knie bleiben aufeinander – die Drehung kommt aus dem oberen Rücken','Nur so weit, wie es angenehm dehnt']},
- hueftbeuger:{name:'Hüftbeuger-Dehnung',dose:'2 × 45 s pro Seite',steps:['Halbkniestand: hinteres Knie auf einer Matte, vorderer Fuß aufgestellt.','Po des hinteren Beins fest anspannen und das Becken leicht einrollen (Steißbein nach unten).','Hüfte ein kleines Stück nach vorn schieben, bis du vorn an der Hüfte des hinteren Beins eine Dehnung spürst.','Arm der hinteren Seite nach oben strecken, Oberkörper aufrecht, ruhig atmen.'],cues:['Kein Hohlkreuz – die Dehnung kommt vom Becken-Einrollen, nicht vom Nach-vorn-Lehnen','Wirkt dem vielen Sitzen und Radfahren entgegen']}
+ hueftbeuger:{name:'Hüftbeuger-Dehnung',dose:'2 × 45 s pro Seite',steps:['Halbkniestand: hinteres Knie auf einer Matte, vorderer Fuß aufgestellt.','Po des hinteren Beins fest anspannen und das Becken leicht einrollen (Steißbein nach unten).','Hüfte ein kleines Stück nach vorn schieben, bis du vorn an der Hüfte des hinteren Beins eine Dehnung spürst.','Arm der hinteren Seite nach oben strecken, Oberkörper aufrecht, ruhig atmen.'],cues:['„Gürtelschnalle Richtung Kinn"','Kein Hohlkreuz – die Dehnung kommt vom Becken-Einrollen, nicht vom Nach-vorn-Lehnen','Alternative: Rückenlage am Bankende, ein Knie zur Brust, anderes Bein hängen lassen','Wirkt dem vielen Sitzen und Radfahren entgegen']}
 };
 const EX={
- latzug:{name:'Latzug',en:'lat pulldown proper form',sets:3,reps:[8,12],rl:'Wdh',wt:'num',wl:'kg',rest:90,
+ latzug:{name:'Latzug',en:'lat pulldown proper form',sets:3,reps:[8,12],rl:'Wdh',wt:'num',wl:'kg',rest:90,big:1,
   muscles:'Breiter Rückenmuskel, Bizeps – Vorbereitung auf den Klimmzug',
   setup:['Knieposter so einstellen, dass die Oberschenkel fest fixiert sind.','Stange etwas breiter als schulterbreit greifen, Handflächen zeigen nach vorn.'],
   steps:['Brust leicht anheben, Oberkörper minimal zurücklehnen (ca. 10–15°).','Zuerst die Schultern nach unten ziehen (weg von den Ohren), dann die Ellbogen Richtung Hosentaschen ziehen.','Stange bis etwa Kinn- bzw. obere Brusthöhe ziehen, kurz halten.','In 2 Sekunden kontrolliert zurück, bis die Arme gestreckt sind.'],
@@ -129,11 +131,11 @@ const EX={
   errors:['Mit dem ganzen Oberkörper nach hinten reißen','Stange hinter den Kopf ziehen – nie machen','Schultern rutschen zu den Ohren'],
   stop:'Schmerz vorn in der Schulter: Griff enger oder Parallelgriff verwenden, Gewicht reduzieren.',
   easier:'Weniger Gewicht, enger Griff mit Handflächen zu dir.',harder:'Langsamer ablassen (3 s), später echte Klimmzüge.'},
- kh_bank:{name:'Kurzhantel-Bankdrücken',en:'dumbbell bench press form',sets:3,reps:[8,12],rl:'Wdh',wt:'num',wl:'kg je Hantel',rest:120,
+ kh_bank:{name:'Kurzhantel-Bankdrücken',en:'dumbbell bench press form',sets:3,reps:[8,12],rl:'Wdh',wt:'num',wl:'kg je Hantel',rest:120,big:1,
   muscles:'Brust, vordere Schulter, Trizeps',
   setup:['Flachbank. Hanteln senkrecht auf die Oberschenkel stellen, ans Bankende setzen.','Zurücklegen und die Hanteln dabei mit einem Kick der Knie über die Brust bringen.','Füße fest auf den Boden, Schulterblätter zusammen und nach unten („in die Gesäßtaschen stecken"). Po, oberer Rücken und Kopf bleiben auf der Bank.'],
   steps:['Hanteln über der Brust, Handgelenke gerade über den Ellbogen, Handflächen Richtung Füße.','In 2 Sekunden absenken, Ellbogen ca. 45° vom Körper (nicht 90° seitlich), bis die Hanteln etwa auf Brusthöhe sind und du eine leichte Dehnung spürst.','Kraftvoll nach oben drücken, leicht zueinander; oben nicht klacken lassen.','Ablegen: Hanteln zur Brust holen, Knie anziehen, Hanteln auf die Oberschenkel setzen und mit Schwung aufsitzen.'],
-  cues:['Schulterblätter bleiben die ganze Zeit zusammen','Ellbogen unter den Handgelenken','Handgelenk gerade: Hantel liegt über dem Unterarm, Knöchel zeigen zur Decke','Ausatmen beim Drücken'],
+  cues:['Schulterblätter bleiben die ganze Zeit zusammen','Ellbogen unter den Handgelenken','Handgelenk gerade: Hantel liegt über dem Unterarm, Knöchel zeigen zur Decke','Ausatmen beim Drücken','Satz beenden, wenn noch 2 gehen würden'],
   errors:['Ellbogen weit seitlich (belastet die Schulter)','Po hebt von der Bank ab','Handgelenke knicken nach hinten'],
   stop:'Schmerz vorn in der Schulter: Ellbogen enger an den Körper, weniger tief absenken, Gewicht reduzieren. Schmerz im Handgelenk: Gewicht runter, Handgelenk bewusst gerade halten.',
   easier:'Leichtere Hanteln oder Liegestütze.',harder:'Langsamer absenken (3 s), später Langhantel-Bankdrücken.'},
@@ -145,7 +147,7 @@ const EX={
   errors:['Brust hebt vom Polster ab (Schwung)','Kopf überstrecken','Schultern Richtung Ohren ziehen'],
   stop:'Ziehen im Nacken: Gewicht reduzieren, Schultern bewusst unten halten.',
   easier:'Leichtere Hanteln, kürzere Bewegung.',harder:'Oben 2 Sekunden halten, mehr Gewicht.'},
- kabel_rudern:{name:'Kabelrudern sitzend',en:'seated cable row form',sets:3,reps:[10,12],rl:'Wdh',wt:'num',wl:'kg',rest:90,
+ kabel_rudern:{name:'Kabelrudern sitzend',en:'seated cable row form',sets:3,reps:[10,12],rl:'Wdh',wt:'num',wl:'kg',rest:90,big:1,
   muscles:'Oberer und mittlerer Rücken, Schulterblattmuskeln, breiter Rücken – plus Rumpfspannung, weil du dich selbst aufrecht hältst. Deine Haltungsübung Nr. 1',
   setup:['Ruderstation am Kabelzug (Sitz mit Fußplatte). Engen Parallelgriff (V-Griff) einhängen.','Hinsetzen, Füße auf die Plattform, Knie leicht gebeugt.','Griff nehmen und zurückrutschen, bis die Arme gestreckt sind und das Gewicht leicht abhebt. Oberkörper senkrecht, Bauch fest, Brust stolz.','Immer dieselbe Station nutzen – die Gewichtsstapel unterscheiden sich.'],
   steps:['Aufrecht sitzen wie beim Haltungs-Check – diese Position bleibt die ganze Übung.','Zuerst die Schulterblätter nach hinten-unten ziehen, dann die Ellbogen nah am Körper nach hinten, bis der Griff etwa den Bauch auf Nabelhöhe berührt.','1 Sekunde halten und die Schulterblätter zusammendrücken, Brust bleibt oben.','In 2 Sekunden kontrolliert zurück, bis die Arme gestreckt sind und die Schulterblätter nach vorn gleiten – der Oberkörper bleibt dabei aufrecht.'],
@@ -153,7 +155,7 @@ const EX={
   errors:['Mit dem Oberkörper vor und zurück schaukeln (Schwung)','Runder Rücken beim Zurückgehen','Schultern ziehen zu den Ohren','Nur mit den Armen ziehen statt mit dem Rücken'],
   stop:'Ziehen im unteren Rücken: Gewicht runter, Bauch fester, Knie etwas mehr beugen. Ziehen im Nacken: Schultern bewusst unten halten.',
   easier:'Weniger Gewicht.',harder:'Oben 2 Sekunden halten, langsamer zurück (3 s), dann mehr Gewicht.'},
- kabel_flys:{name:'Kabelzug-Flys',en:'cable chest fly form',sets:3,reps:[12,15],rl:'Wdh',wt:'num',wl:'kg je Seite',rest:75,
+ kabel_flys:{name:'Kabelzug-Flys',en:'cable chest fly form',sets:3,reps:[12,15],rl:'Wdh',wt:'num',wl:'kg je Seite',rest:75,iso:1,
   muscles:'Brust',
   setup:['Beide Rollen etwa auf Schulterhöhe einstellen, D-Griffe einhängen.','Griffe nehmen, einen Schritt nach vorn in Schrittstellung, Oberkörper leicht vorgeneigt.','Arme seitlich, Ellbogen leicht gebeugt – dieser Winkel bleibt fix.'],
   steps:['Hände in einem großen Bogen vor der Brust zusammenführen, wie beim Umarmen eines Baumes.','Vorne 1 Sekunde die Brust fest anspannen.','Langsam wieder öffnen, bis du eine Dehnung in der Brust spürst – nicht weiter.'],
@@ -161,7 +163,7 @@ const EX={
   errors:['Arme beugen und drücken statt Bogen','Zu weit nach hinten öffnen','Zu schweres Gewicht mit Schwung'],
   stop:'Ziehen vorn in der Schulter: weniger weit öffnen, Gewicht reduzieren.',
   easier:'Butterfly-Maschine.',harder:'Langsamer zurück (3 s).'},
- face_pull:{name:'Face Pulls',en:'face pull cable rope form',sets:3,reps:[12,15],rl:'Wdh',wt:'num',wl:'kg',rest:60,
+ face_pull:{name:'Face Pulls',en:'face pull cable rope form',sets:3,reps:[12,15],rl:'Wdh',wt:'num',wl:'kg',rest:60,iso:1,
   muscles:'Hintere Schulter, Rotatorenmanschette, oberer Rücken – Haltung',
   setup:['Kabelrolle auf Augen- oder Stirnhöhe, Seilgriff einhängen.','Seil von oben greifen, Daumen zeigen nach hinten.','Ein bis zwei Schritte zurück, bis die Arme gestreckt sind; stabiler Stand.'],
   steps:['Seil Richtung Gesicht ziehen, Hände dabei auseinander.','Ellbogen bleiben hoch und gehen nach außen-hinten.','Ende: Hände neben den Ohren wie bei einer „Doppelbizeps-Pose", Schulterblätter zusammen, 1 Sekunde halten.','Langsam zurück.'],
@@ -169,31 +171,31 @@ const EX={
   errors:['Zu schwer, Oberkörper kippt nach hinten','Ellbogen fallen ab (dann wird es Rudern)','Schultern zu den Ohren'],
   stop:'Schmerz in der Schulter: Gewicht runter, Bewegung kleiner.',
   easier:'Mit Band (Band Pull-Aparts).',harder:'Oben 2 Sekunden halten.'},
- goblet:{name:'Goblet Squat',en:'goblet squat form',sets:3,reps:[8,12],rl:'Wdh',wt:'num',wl:'kg',rest:120,
+ goblet:{name:'Goblet Squat',en:'goblet squat form',sets:3,reps:[8,12],rl:'Wdh',wt:'num',wl:'kg',rest:120,big:1,
   muscles:'Oberschenkel vorn, Po, Rumpf',
   setup:['Eine Kurzhantel senkrecht vor der Brust halten, beide Hände unter dem oberen Gewicht wie einen Kelch.','Ellbogen zeigen nach unten, Hantel nah am Körper.','Füße etwas weiter als hüftbreit, Zehen leicht nach außen (15–30°).'],
   steps:['Einatmen, Bauch fest.','Gleichzeitig Hüfte nach hinten-unten setzen und Knie beugen. Knie zeigen in Richtung Zehen (sie dürfen über die Zehen).','So tief, wie der Rücken gerade bleibt – Ziel: Ellbogen berühren die Innenseite der Knie.','Durch den ganzen Fuß hochdrücken, oben Po anspannen, ausatmen.'],
-  cues:['Brust stolz, Oberkörper aufrecht','Fersen bleiben am Boden','Knie nach außen schieben'],
+  cues:['Brust stolz, Oberkörper aufrecht','Fersen bleiben am Boden','Knie nach außen schieben','Satz beenden, wenn noch 2 gehen würden'],
   errors:['Knie fallen nach innen','Fersen heben ab','Unten rundet sich der untere Rücken (dann weniger tief gehen)'],
   stop:'Stechender Knieschmerz oder Schmerz im unteren Rücken: weniger tief, Gewicht reduzieren, filmen und im Coach-Chat zeigen.',
   easier:'Ohne Gewicht auf eine Bank setzen und wieder aufstehen (Box Squat).',harder:'Schwerere Hantel, unten 1 Sekunde Pause.'},
- kh_rdl:{name:'Rumänisches Kreuzheben (Kurzhanteln)',en:'dumbbell romanian deadlift form',sets:3,reps:[8,12],rl:'Wdh',wt:'num',wl:'kg je Hantel',rest:120,
+ kh_rdl:{name:'Rumänisches Kreuzheben (Kurzhanteln)',en:'dumbbell romanian deadlift form',sets:3,reps:[8,12],rl:'Wdh',wt:'num',wl:'kg je Hantel',rest:120,big:1,
   muscles:'Hintere Oberschenkel, Po, unterer Rücken – wichtig für die Haltung',
   setup:['Hüftbreit stehen, Hanteln vor den Oberschenkeln, Handflächen zum Körper.','Knie leicht gebeugt – dieser Winkel bleibt die ganze Übung gleich.','Schultern zurück, Brust stolz, Bauch fest.'],
   steps:['Hüfte nach hinten schieben, als wolltest du mit dem Po eine Tür hinter dir zumachen.','Hanteln gleiten nah an den Beinen nach unten, der Oberkörper neigt sich nach vorn.','Runter, bis du eine deutliche Dehnung hinten im Oberschenkel spürst – meist knapp unter dem Knie. Der Rücken bleibt gerade.','Hüfte nach vorn schieben, Po fest anspannen, aufrecht stehen. Oben nicht nach hinten lehnen.'],
-  cues:['Hüfte nach hinten, nicht nach unten','Hanteln „rasieren" die Beine','Blick schräg nach unten, Nacken lang'],
-  errors:['Rücken rundet sich (dann weniger tief)','Knie stark beugen – wird zur Kniebeuge','Hanteln weit vom Körper'],
+  cues:['Hüfte nach hinten, nicht nach unten','Hanteln „rasieren" die Beine','Blick schräg nach unten, Nacken lang','Satz beenden, wenn noch 2 gehen würden'],
+  errors:['Rücken rundet sich (dann weniger tief)','Knie stark beugen – wird zur Kniebeuge','Hanteln weit vom Körper','Oben ins Hohlkreuz lehnen'],
   stop:'Ziehen oder Schmerz im unteren Rücken (nicht die Dehnung hinten am Bein): sofort stoppen. Diese Übung unbedingt einmal filmen und im Coach-Chat prüfen lassen.',
   easier:'Mit einem Besenstiel oder ganz leichten Hanteln üben, Bewegung kürzer.',harder:'Schwerere Hanteln, später Langhantel.'},
- ausfall:{name:'Ausfallschritte rückwärts',en:'reverse lunge dumbbell form',sets:2,reps:[8,12],rl:'Wdh/Seite',wt:'num',wl:'kg je Hantel',rest:90,
+ ausfall:{name:'Ausfallschritte rückwärts',en:'reverse lunge dumbbell form',sets:2,reps:[8,12],rl:'Wdh/Seite',wt:'num',wl:'kg je Hantel',rest:90,big:1,
   muscles:'Oberschenkel, Po, Gleichgewicht',
-  setup:['Aufrecht stehen, Füße hüftbreit, Hanteln seitlich. Woche 1–2 ohne Gewicht (0 eintragen).'],
+  setup:['Aufrecht stehen, Füße hüftbreit, Hanteln seitlich (ohne Gewicht: 0 eintragen).','Bauch fest, Becken leicht einrollen – wie bei der Hüftbeuger-Dehnung.'],
   steps:['Mit einem Bein einen großen Schritt nach hinten machen.','Hinteres Knie Richtung Boden absenken, bis es knapp darüber ist; vorderes Knie über dem Fuß.','Durch die vordere Ferse kraftvoll zurück in den Stand drücken.','Alle Wiederholungen auf einer Seite, dann wechseln.'],
-  cues:['Füße wie auf Schienen, nicht auf einer Linie','Oberkörper aufrecht, leicht nach vorn geneigt','Vorderes Knie zeigt Richtung Zehen'],
-  errors:['Vorderes Knie knickt nach innen','Schritt zu kurz','Wackeln – dann mit einer Hand an Wand oder Stange halten'],
-  stop:'Knieschmerz vorn: Schritt größer, weniger tief.',
-  easier:'Ohne Gewicht, eine Hand an einer Stange.',harder:'Schwerere Hanteln, später Bulgarian Split Squats.'},
- kabel_crunch:{name:'Kabel-Crunch',en:'kneeling cable crunch form',sets:3,reps:[10,15],rl:'Wdh',wt:'num',wl:'kg',rest:75,
+  cues:['Becken einrollen – „Gürtelschnalle Richtung Kinn", Rippen runter, kein Hohlkreuz','Oberkörper aufrecht, leicht nach vorn geneigt','Füße wie auf Schienen, nicht auf einer Linie','Vorderes Knie zeigt Richtung Zehen'],
+  errors:['Hohlkreuz beim Zurücktreten (belastet den unteren Rücken)','Vorderes Knie knickt nach innen','Schritt zu kurz','Wackeln – dann mit einer Hand an Wand oder Stange halten'],
+  stop:'Knieschmerz vorn: Schritt größer, weniger tief. Ziehen im unteren Rücken: Gewicht runter, Becken einrollen, Oberkörper leicht nach vorn neigen.',
+  easier:'Ohne Gewicht, eine Hand an einer Stange.',harder:'Schwerere Hanteln (kleine Schritte!), später Bulgarian Split Squats.'},
+ kabel_crunch:{name:'Kabel-Crunch',en:'kneeling cable crunch form',sets:3,reps:[10,15],rl:'Wdh',wt:'num',wl:'kg',rest:75,iso:1,
   muscles:'Gerader Bauchmuskel (Sixpack) – mit Gewicht wird er dicker und sichtbarer',
   setup:['Seilgriff an der oberen Rolle.','Vor dem Kabel knien, Seil neben dem Kopf halten.','Hüfte bleibt über den Knien.'],
   steps:['Ausatmen und den Oberkörper einrollen: Rippen Richtung Becken, Ellbogen Richtung Oberschenkelmitte.','Unten 1 Sekunde fest anspannen.','Langsam wieder aufrollen, bis der Bauch gedehnt ist.'],
@@ -201,9 +203,18 @@ const EX={
   errors:['Aus der Hüfte verbeugen statt einrollen','Po setzt sich nach hinten','Zu schweres Gewicht'],
   stop:'Schmerz im unteren Rücken: Gewicht reduzieren, Bewegung kleiner.',
   easier:'Crunches am Boden.',harder:'Mehr Gewicht, 3 s zurück.'},
- dead_bug:{name:'Dead Bug',en:'dead bug exercise form',sets:3,reps:[6,10],rl:'Wdh/Seite',wt:'none',wl:'',rest:60,
+ bauch_maschine:{name:'Bauchmaschine (Crunch)',en:'ab crunch machine proper form',sets:3,reps:[10,15],rl:'Wdh',wt:'num',wl:'kg',rest:75,iso:1,
+  first:'Bisher als Kabel-Crunch eingetragen (zuletzt 45 kg × 15–20, „passend"). Mit dem neuen langsamen Tempo: ca. 40 kg, Ziel 12–15 Wdh. Nur, wenn der Rücken schmerzfrei ist.',
+  muscles:'Gerader Bauchmuskel (Sixpack) – mit Gewicht und Steigerung wird er dicker und drückt sich besser durch',
+  setup:['Sitz so einstellen, dass Griffe bzw. Polster auf Brust- oder Schulterhöhe liegen.','Füße unter die Rollen haken, falls vorhanden – die Beine drücken aber nicht aktiv mit.','Po fest auf dem Sitz, aufrecht starten.'],
+  steps:['Ausatmen und den Oberkörper einrollen: Rippen Richtung Becken, rund wie eine Garnele (ca. 2 s).','Unten 1 Sekunde fest anspannen.','In 3 Sekunden zurück, bis der Bauch leicht gedehnt ist.'],
+  cues:['Einrollen, nicht aus der Hüfte klappen','Die Hände halten nur – die Arme ziehen nicht','Das Brennen ist der Startschuss, nicht das Ziel: danach noch 3–5 saubere Wdh','Stopp, wenn das Tempo langsam wird, die Bewegung kürzer wird oder die Hüfte mitklappt'],
+  errors:['Aus der Hüfte nach vorn klappen (dann arbeiten Hüftbeuger und Rücken)','Mit den Armen ziehen oder mit den Beinen drücken','Schwung, Gewicht knallt zurück'],
+  stop:'Ziehen im unteren Rücken oder vorn an der Hüfte: Gewicht runter, Bewegung kleiner, bewusst einrollen. Bei akuten Rückenschmerzen pausieren.',
+  easier:'Weniger Gewicht oder Crunches am Boden.',harder:'Mehr Gewicht (5-kg-Schritte), unten 2 s halten.'},
+ dead_bug:{name:'Dead Bug',en:'dead bug exercise form',sets:3,reps:[6,10],rl:'Wdh/Seite',wt:'num',wl:'kg je Hand',rest:60,
   muscles:'Tiefe Bauchmuskulatur, Körperspannung',
-  setup:['Rückenlage, Arme senkrecht zur Decke.','Beine in Tischposition: Hüfte und Knie 90°.','Rippen runter, unteren Rücken sanft gegen den Boden drücken.'],
+  setup:['Rückenlage, Arme senkrecht zur Decke.','Beine in Tischposition: Hüfte und Knie 90°.','Rippen runter, unteren Rücken sanft gegen den Boden drücken.','Optional leichte Kurzhanteln in den Händen – Gewicht pro Hand eintragen, ohne Gewicht leer lassen.'],
   steps:['Ausatmen und gleichzeitig den rechten Arm über den Kopf und das linke Bein Richtung Boden strecken.','Nur so weit, wie der untere Rücken am Boden bleibt.','Zurück in die Ausgangsposition, Seite wechseln.'],
   cues:['Langsam – ca. 3 Sekunden pro Strecken','Unterer Rücken bleibt am Boden','Ruhig weiteratmen'],
   errors:['Hohlkreuz','Zu schnell','Luft anhalten'],
@@ -217,7 +228,7 @@ const EX={
   errors:['Mit Schwung hochkicken','Nur halbe Bewegung','Schultern bleiben oben an den Ohren hängen'],
   stop:'Schmerz im Ellbogen oder in der Schulter: mehr Unterstützung, Griff mit Handflächen zu dir.',
   easier:'Mehr Gegengewicht oder stärkeres Band (lila + schwarz zusammen).',harder:'Weniger Hilfe – Ziel: der erste Klimmzug ohne Hilfe.'},
- schraeg_kh:{name:'Schrägbank-Kurzhanteldrücken',en:'incline dumbbell press 30 degree form',sets:3,reps:[8,12],rl:'Wdh',wt:'num',wl:'kg je Hantel',rest:120,
+ schraeg_kh:{name:'Schrägbank-Kurzhanteldrücken',en:'incline dumbbell press 30 degree form',sets:3,reps:[8,12],rl:'Wdh',wt:'num',wl:'kg je Hantel',rest:120,big:1,
   muscles:'Obere Brust, vordere Schulter – macht die Brust oben voller',
   setup:['Bank auf ca. 30° einstellen (nicht steiler, sonst wird es eine Schulterübung).','Hanteln auf die Oberschenkel, mit Knie-Kick in Position wie beim Flachbankdrücken.','Schulterblätter zusammen und nach unten, Füße fest.'],
   steps:['Hanteln über der oberen Brust, Handgelenke gerade.','In 2 Sekunden absenken bis auf Höhe der oberen Brust, Ellbogen ca. 45°.','Nach oben drücken, leicht zueinander.','Ablegen wie beim Flachbankdrücken.'],
@@ -225,7 +236,7 @@ const EX={
   errors:['Bank zu steil','Ellbogen weit seitlich','Po hebt ab','Handgelenke knicken nach hinten'],
   stop:'Schulterschmerz: Ellbogen enger, weniger tief, Gewicht runter. Schmerz im Handgelenk: Gewicht runter, Handgelenk bewusst gerade halten.',
   easier:'Leichtere Hanteln.',harder:'Langsamer absenken (3 s).'},
- einarm_rudern:{name:'Einarmiges Kurzhantelrudern',en:'one arm dumbbell row form',sets:3,reps:[10,12],rl:'Wdh/Seite',wt:'num',wl:'kg',rest:90,
+ einarm_rudern:{name:'Einarmiges Kurzhantelrudern',en:'one arm dumbbell row form',sets:3,reps:[10,12],rl:'Wdh/Seite',wt:'num',wl:'kg',rest:90,big:1,
   muscles:'Breiter Rücken, oberer Rücken, Bizeps',
   setup:['Linkes Knie und linke Hand auf eine Flachbank, rechter Fuß seitlich am Boden.','Rücken gerade, etwa parallel zum Boden, Bauch fest.','Hantel in der rechten Hand hängt unter der Schulter.'],
   steps:['Schulterblatt nach hinten ziehen, dann den Ellbogen nah am Körper Richtung Hüfte ziehen.','Oben 1 Sekunde halten.','Langsam ablassen, bis der Arm gestreckt ist.','Alle Wiederholungen, dann Seite wechseln.'],
@@ -233,7 +244,7 @@ const EX={
   errors:['Oberkörper verdreht sich','Schwung','Runder Rücken'],
   stop:'Ziehen im unteren Rücken: Bauch fester, Gewicht runter.',
   easier:'Leichtere Hantel.',harder:'Oben 2 Sekunden halten.'},
- schulter_dr:{name:'Kurzhantel-Schulterdrücken (sitzend)',en:'seated dumbbell shoulder press form',sets:3,reps:[8,12],rl:'Wdh',wt:'num',wl:'kg je Hantel',rest:90,
+ schulter_dr:{name:'Kurzhantel-Schulterdrücken (sitzend)',en:'seated dumbbell shoulder press form',sets:3,reps:[8,12],rl:'Wdh',wt:'num',wl:'kg je Hantel',rest:90,big:1,
   muscles:'Schultern, Trizeps',
   setup:['Bank fast senkrecht (ca. 80–90°), Rücken an der Lehne, Füße fest.','Hanteln auf Schulterhöhe, Handflächen nach vorn oder leicht zueinander.','Ellbogen etwas vor dem Körper, nicht ganz seitlich.'],
   steps:['Bauch fest, Rippen unten.','Hanteln nach oben drücken, bis die Arme fast gestreckt sind; oben leicht zueinander.','Langsam zurück auf etwa Ohrhöhe.'],
@@ -241,7 +252,7 @@ const EX={
   errors:['Hohlkreuz','Ellbogen zu weit hinten','Mit schwerem Gewicht zu tief absenken'],
   stop:'Schulterschmerz: Handflächen zueinander drehen, weniger tief.',
   easier:'Leichtere Hanteln oder Schulterpresse-Maschine.',harder:'Langsamer absenken.'},
- seitheben:{name:'Seitheben',en:'dumbbell lateral raise form',sets:3,reps:[12,15],rl:'Wdh',wt:'num',wl:'kg je Hantel',rest:60,
+ seitheben:{name:'Seitheben',en:'dumbbell lateral raise form',sets:3,reps:[12,15],rl:'Wdh',wt:'num',wl:'kg je Hantel',rest:60,iso:1,
   muscles:'Seitliche Schulter – lässt den Oberkörper breiter wirken',
   setup:['Aufrecht stehen, leichte Hanteln seitlich, Oberkörper minimal vorgeneigt.','Arme leicht gebeugt.'],
   steps:['Arme seitlich anheben bis auf Schulterhöhe – nicht höher.','Die Ellbogen führen, Hände bleiben etwa auf Ellbogenhöhe.','In 2–3 Sekunden langsam absenken.'],
@@ -249,7 +260,7 @@ const EX={
   errors:['Schwung mit dem Oberkörper','Schultern zu den Ohren (der Nacken arbeitet)','Zu schweres Gewicht'],
   stop:'Stechen in der Schulter: weniger hoch, leichter.',
   easier:'Einarmig am Kabel.',harder:'Langsameres Absenken, mehr Wiederholungen.'},
- curl:{name:'Bizeps-Curls (Kurzhantel)',en:'dumbbell bicep curl form',sets:3,reps:[10,12],rl:'Wdh',wt:'num',wl:'kg je Hantel',rest:60,
+ curl:{name:'Bizeps-Curls (Kurzhantel)',en:'dumbbell bicep curl form',sets:3,reps:[10,12],rl:'Wdh',wt:'num',wl:'kg je Hantel',rest:60,iso:1,
   muscles:'Bizeps, Unterarme',
   setup:['Aufrecht stehen, Hanteln seitlich, Handflächen nach vorn.','Ellbogen seitlich am Körper.'],
   steps:['Hanteln nach oben beugen, die Ellbogen bleiben am Platz.','Oben kurz anspannen.','In 2–3 Sekunden absenken, bis die Arme fast gestreckt sind.'],
@@ -257,7 +268,7 @@ const EX={
   errors:['Schwung aus Rücken und Hüfte','Ellbogen wandern nach vorn','Nur halbe Bewegung'],
   stop:'Schmerz im Ellbogen: Gewicht runter, Hammergriff (Handflächen zueinander).',
   easier:'Leichter, sitzend.',harder:'Langsamer absenken.'},
- trizeps:{name:'Trizepsdrücken am Kabel (Seil)',en:'tricep rope pushdown form',sets:3,reps:[10,12],rl:'Wdh',wt:'num',wl:'kg',rest:60,
+ trizeps:{name:'Trizepsdrücken am Kabel (Seil)',en:'tricep rope pushdown form',sets:3,reps:[10,12],rl:'Wdh',wt:'num',wl:'kg',rest:60,iso:1,
   muscles:'Trizeps – etwa zwei Drittel des Oberarms',
   setup:['Seilgriff an der oberen Rolle.','Aufrecht stehen, leicht vorgeneigt, Ellbogen seitlich am Körper.'],
   steps:['Unterarme nach unten strecken, unten das Seil leicht auseinanderziehen.','Kurz halten.','Langsam zurück, bis die Ellbogen etwa 90° gebeugt sind.'],
@@ -265,7 +276,7 @@ const EX={
   errors:['Ellbogen wandern nach vorn','Mit dem Körpergewicht drücken','Zu schwer'],
   stop:'Ellbogenschmerz: leichter, Stange statt Seil probieren.',
   easier:'Leichteres Gewicht.',harder:'Unten 1 Sekunde halten.'},
- beinpresse:{name:'Beinpresse',en:'leg press proper form',sets:3,reps:[10,12],rl:'Wdh',wt:'num',wl:'kg',rest:120,
+ beinpresse:{name:'Beinpresse',en:'leg press proper form',sets:3,reps:[10,12],rl:'Wdh',wt:'num',wl:'kg',rest:120,big:1,
   muscles:'Oberschenkel vorn, Po',
   setup:['Rücken und Po fest ans Polster.','Füße hüftbreit in der Mitte der Platte, Zehen leicht nach außen.','Sicherungen lösen.'],
   steps:['Langsam beugen, bis die Knie etwa 90° haben – oder kurz bevor sich der Po vom Polster löst.','Durch den ganzen Fuß wegdrücken.','Oben die Knie nicht ganz durchdrücken (nie einrasten).','Am Ende die Sicherungen wieder schließen.'],
@@ -275,7 +286,7 @@ const EX={
   easier:'Weniger Gewicht.',harder:'Langsamer (3 s) absenken.'},
  hip_thrust:{name:'Hip Thrust',en:'hip thrust form beginner',sets:3,reps:[10,12],rl:'Wdh',wt:'num',wl:'kg',rest:90,
   muscles:'Po, hintere Oberschenkel – stabilisiert Becken und Haltung',
-  setup:['Falls vorhanden: Hip-Thrust-Maschine (am einfachsten). Sonst: oberer Rücken (Unterkante Schulterblätter) an eine Flachbank, Langhantel mit Polster oder Kurzhantel auf den Hüftknochen.','Füße flach, hüftbreit; in der oberen Position sind die Schienbeine senkrecht.','Woche 1–2 ohne Gewicht oder nur mit einer Kurzhantel.'],
+  setup:['Falls vorhanden: Hip-Thrust-Maschine (am einfachsten). Sonst: oberer Rücken (Unterkante Schulterblätter) an eine Flachbank, Langhantel mit Polster oder Kurzhantel auf den Hüftknochen.','Füße flach, hüftbreit; in der oberen Position sind die Schienbeine senkrecht.'],
   steps:['Kinn leicht zur Brust, Rippen unten.','Hüfte nach oben drücken, bis Knie, Hüfte und Schultern eine Linie bilden.','Oben den Po 1 Sekunde maximal anspannen.','Langsam absenken.'],
   cues:['Die Bewegung kommt aus der Hüfte, nicht aus dem Rücken','Blick nach vorn, nicht zur Decke','Durch die Fersen drücken'],
   errors:['Hohlkreuz statt Hüftstreckung','Füße zu weit weg oder zu nah','Kopf in den Nacken'],
@@ -283,25 +294,25 @@ const EX={
   easier:'Glute Bridge am Boden.',harder:'Mehr Gewicht, oben 2 s halten.'},
  beinbeuger:{name:'Beinbeuger (Maschine)',en:'seated leg curl machine form',sets:3,reps:[10,15],rl:'Wdh',wt:'num',wl:'kg',rest:75,
   muscles:'Hintere Oberschenkel',
-  setup:['Sitzend oder liegend, je nach Maschine.','Drehpunkt der Maschine auf Kniehöhe ausrichten.','Polster knapp über der Ferse.'],
+  setup:['Optional: nur wenn die Maschine funktioniert – sonst einfach überspringen. Nicht abgehakte Übungen werden nicht gespeichert.','Sitzend oder liegend, je nach Maschine.','Drehpunkt der Maschine auf Kniehöhe ausrichten.','Polster knapp über der Ferse.'],
   steps:['Beine kraftvoll beugen.','Kurz halten.','In 2–3 Sekunden zurück.'],
   cues:['Hüfte bleibt am Polster','Langsam zurück','Fußspitzen zu dir ziehen'],
   errors:['Schwung','Hüfte hebt ab','Gewicht fällt zurück'],
   stop:'Krampf: kurz dehnen, Gewicht reduzieren. Knieschmerz: Einstellung prüfen.',
   easier:'Weniger Gewicht.',harder:'Langsamer zurück.'},
- farmers:{name:'Farmer’s Walk',en:'farmers walk form',sets:3,reps:[30,40],rl:'m',wt:'num',wl:'kg je Hand',rest:90,
-  muscles:'Ganzkörperspannung, oberer Rücken, Griff – trainiert aufrechtes Gehen unter Last',
+ farmers:{name:'Farmer’s Hold',en:'farmers carry static hold',sets:3,reps:[30,40],rl:'s',wt:'num',wl:'kg je Hand',rest:90,
+  muscles:'Ganzkörperspannung, oberer Rücken, Griff – trainiert aufrechte Haltung unter Last',
   setup:['Zwei schwere Kurzhanteln oder Kettlebells neben die Füße stellen.','Aufheben wie beim Kreuzheben: Hüfte zurück, Rücken gerade, aus den Beinen hochdrücken.'],
-  steps:['Aufrecht stehen: Brustbein hoch, Schultern zurück und unten, Bauch fest.','Mit kurzen, kontrollierten Schritten 30–40 m gehen.','Kontrolliert und mit geradem Rücken absetzen.'],
-  cues:['Groß werden – als zöge dich ein Faden am Kopf nach oben','Hanteln schlagen nicht an die Beine','Ruhig atmen'],
-  errors:['Schultern hängen nach vorn','Runder Rücken beim Absetzen','Hektische, große Schritte'],
-  stop:'Schmerz im unteren Rücken: leichter, kürzere Strecke.',
-  easier:'Leichtere Hanteln, 20 m.',harder:'Schwerer oder länger.'},
- knieheben:{name:'Knieheben hängend',en:'hanging knee raise / captains chair knee raise',sets:3,reps:[8,12],rl:'Wdh',wt:'none',wl:'',rest:75,
+  steps:['Aufrecht stehen: Brustbein hoch, Schultern zurück und unten, Bauch fest.','30–40 Sekunden halten – im Stand oder auf der Stelle gehend (kein Platz zum Laufen nötig).','Kontrolliert und mit geradem Rücken absetzen.'],
+  cues:['Groß werden – als zöge dich ein Faden am Kopf nach oben','Rippen runter, kein Hohlkreuz','Ruhig atmen'],
+  errors:['Schultern hängen nach vorn','Zur Seite kippen oder ins Hohlkreuz fallen','Runder Rücken beim Absetzen'],
+  stop:'Schmerz im unteren Rücken: leichter, kürzer.',
+  easier:'Leichtere Hanteln, 20 s.',harder:'Schwerer oder länger (bis 60 s).'},
+ knieheben:{name:'Knieheben hängend',en:'hanging knee raise / captains chair knee raise',sets:3,reps:[8,12],rl:'Wdh',wt:'none',wl:'',rest:75,iso:1,
   muscles:'Unterer Bauch, Hüftbeuger, Griff',
   setup:['An der Klimmzugstange hängen oder – einfacher – an einer Dip-Station mit Unterarmstütze („Captain’s Chair").','Schultern aktiv nach unten ziehen.'],
   steps:['Knie Richtung Brust ziehen und dabei das Becken einrollen (Po nach vorn-oben kippen). Erst das Einrollen trainiert den Bauch richtig.','Kurz halten.','Langsam absenken, ohne zu schwingen.'],
-  cues:['Becken einrollen','Kein Schwung','Ausatmen beim Hochziehen'],
+  cues:['Becken einrollen – sonst arbeitet nur der Hüftbeuger','Lieber 8 langsame als 12 geschwungene','Ausatmen beim Hochziehen'],
   errors:['Beine schwingen','Nur die Knie heben ohne Becken-Einrollen','Hohlkreuz'],
   stop:'Schmerz im unteren Rücken: Reverse Crunch am Boden statt hängend.',
   easier:'Reverse Crunch auf einer Bank liegend.',harder:'Beine gestreckt heben.'},
@@ -333,7 +344,7 @@ const EX={
   muscles:'Oberschenkel, Po',
   setup:['Schrittstellung: ein Fuß vorn, einer hinten, Füße hüftbreit.','Schwerer: hinteren Fuß auf Bett oder Stuhl (Bulgarian Split Squat).'],
   steps:['Senkrecht nach unten gehen, bis das hintere Knie knapp über dem Boden ist.','Durch die vordere Ferse hochdrücken.','Alle Wiederholungen, dann Seite wechseln.'],
-  cues:['Oberkörper aufrecht','Vorderes Knie zeigt Richtung Zehen'],
+  cues:['Oberkörper aufrecht','Vorderes Knie zeigt Richtung Zehen','Becken einrollen, kein Hohlkreuz'],
   errors:['Knie knickt nach innen','Wackeln – Hand an die Wand'],
   stop:'Knieschmerz: weniger tief.',
   easier:'Weniger tief, Hand an der Wand.',harder:'Hinterer Fuß erhöht, 3 s absenken.'},
@@ -345,7 +356,7 @@ const EX={
   errors:['Hohlkreuz','Becken kippt zur Seite'],
   stop:'Krampf hinten im Oberschenkel: Fuß näher an den Po.',
   easier:'Mit beiden Beinen.',harder:'Oben 3 s halten.'},
- band_curl:{name:'Bizeps-Curls mit Band',en:'resistance band bicep curl',sets:3,reps:[12,15],rl:'Wdh',wt:'text',wl:'Band',rest:60,
+ band_curl:{name:'Bizeps-Curls mit Band',en:'resistance band bicep curl',sets:3,reps:[12,15],rl:'Wdh',wt:'text',wl:'Band',rest:60,iso:1,
   muscles:'Bizeps',
   setup:['Mit beiden Füßen mittig auf das Band stellen, Enden greifen, Handflächen nach vorn.'],
   steps:['Hände nach oben beugen, Ellbogen bleiben am Körper.','Oben anspannen.','Langsam absenken.'],
@@ -357,13 +368,16 @@ const EX={
 const GW=['rudern','pullapart','wallslide','openbook'];
 const SESSIONS={
  OKA:{name:'Oberkörper A',focus:'Haltung + Brust',warm:GW,ex:['latzug','kh_bank','kabel_rudern','kabel_flys','face_pull'],end:[]},
- UKA:{name:'Unterkörper A',focus:'Beine + Bauch',warm:GW,ex:['goblet','kh_rdl','ausfall','kabel_crunch','dead_bug'],end:['hueftbeuger']},
+ UKA:{name:'Unterkörper A',focus:'Beine + Bauch',warm:GW,ex:['goblet','kh_rdl','ausfall','bauch_maschine','dead_bug'],end:['hueftbeuger']},
  OKB:{name:'Oberkörper B',focus:'Brust, Schultern + Arme',warm:GW,ex:['klimmzug','schraeg_kh','einarm_rudern','schulter_dr','seitheben','curl','trizeps'],end:[]},
- UKB:{name:'Unterkörper B',focus:'Beine, Haltung + Bauch',warm:GW,ex:['beinpresse','hip_thrust','beinbeuger','farmers','knieheben','pallof'],end:['hueftbeuger']},
- GK:{name:'Ganzkörper (Reisewoche)',focus:'2× pro Reisewoche statt 4 Einheiten',warm:GW,ex:['goblet','kh_bank','kabel_rudern','kh_rdl','face_pull','seitheben','kabel_crunch'],sets:{face_pull:2,seitheben:2,kabel_crunch:2},end:['hueftbeuger']},
+ UKB:{name:'Unterkörper B',focus:'Beine, Haltung + Bauch',warm:GW,ex:['beinpresse','hip_thrust','farmers','knieheben','pallof','beinbeuger'],opt:['beinbeuger'],end:['hueftbeuger']},
+ GK:{name:'Ganzkörper (Reisewoche)',focus:'2× pro Reisewoche statt 4 Einheiten',warm:GW,ex:['goblet','kh_bank','kabel_rudern','kh_rdl','face_pull','seitheben','bauch_maschine'],sets:{face_pull:2,seitheben:2,bauch_maschine:2},end:['hueftbeuger']},
  HOTEL:{name:'Hotel-Workout',focus:'Band + Körpergewicht, ca. 30 min',warm:['pullapart','wallslide','openbook'],ex:['liegestuetz','band_rudern','split_squat','einbein_bridge','band_curl','dead_bug'],end:['hueftbeuger']},
- SWIM:{name:'Schwimmen',focus:'Locker – du könntest dich noch unterhalten',swim:true}
+ SWIM:{name:'Schwimmen',focus:'Locker – du könntest dich noch unterhalten',swim:true,garmin:'Schwimmbad',dist:'m'},
+ RUN:{name:'Laufen',focus:'Locker, 25–35 min – du könntest dich noch unterhalten. Erst, wenn der Rücken schmerzfrei ist',swim:true,garmin:'Laufen',dist:'km'}
 };
+const CARDIO=['SWIM','RUN'];
+const isCardio=s=>CARDIO.includes(s.type);
 
 // ---------- Helfer ----------
 const $=s=>document.querySelector(s);
@@ -376,7 +390,7 @@ const li=x=>'<li>'+x+'</li>';
 function weekOf(ds){const s=new Date(START+'T00:00:00'),d=new Date(ds+'T00:00:00');const diff=Math.round((d-s)/864e5);return diff<0?0:Math.floor(diff/7)+1}
 function fmtDate(ds){return new Date(ds+'T00:00:00').toLocaleDateString('de-DE',{weekday:'short',day:'numeric',month:'numeric'})}
 function num(v){if(v===''||v==null)return null;const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?null:n}
-function phase(w){if(w===0)return 'Vorbereitung: Technik kennenlernen, ganz leicht';if(w<=2)return 'Technikphase: 2 Sätze, bewusst leicht';if(w<=8)return 'Aufbauphase: steigern nach der Regel';if(w<=12)return 'Aufbau + Reisen: Halten ist auch ein Erfolg';return 'Nach den 12 Wochen: weiter geht’s'}
+function phase(w){if(w===0)return 'Vorbereitung: Technik kennenlernen, ganz leicht';if(w<=2)return 'Technikphase: 2 Sätze, bewusst leicht';if(w<=8)return 'Aufbauphase: steigern nach der Regel, „passend" statt „hart"';if(w<=12)return 'Aufbau + Reisen: Halten ist auch ein Erfolg';return 'Nach den 12 Wochen: weiter geht’s'}
 
 // ---------- Daten ----------
 function blank(){return {schema:1,startDate:START,sessions:[],weights:[],checkins:[],daily:{},draft:null}}
@@ -385,18 +399,20 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){aler
 let data=load(),view='home',checkinWeek=null,planDay=null;
 
 function lastPerf(id){for(let i=data.sessions.length-1;i>=0;i--){const s=data.sessions[i];if(!s.exercises)continue;const e=s.exercises.find(x=>x.id===id);if(e&&e.sets.length)return Object.assign({date:s.date},e)}return null}
-function fmtSet(ex,s){return ((ex.wt!=='none'&&s.w!==null&&s.w!==''&&s.w!==undefined)?s.w+(ex.wt==='num'?' kg':'')+' × ':'')+s.r}
-function hint(id){const ex=EX[id],l=lastPerf(id);
- if(!l)return 'Erstes Mal: Wähle ein Gewicht, mit dem die Technik sauber ist und du noch 3+ Wdh übrig hättest. Lieber zu leicht.';
+function fmtSet(ex,s){return ((ex.wt!=='none'&&s.w!==null&&s.w!==''&&s.w!==undefined)?s.w+(ex.wt==='num'?' kg':'')+' × ':'')+s.r+(ex.rl==='s'?' s':'')}
+function hint(id){const ex=EX[id],l=lastPerf(id),burn=ex.iso?'<br>'+BURN:'';
+ if(!l)return (ex.first||'Erstes Mal: Wähle ein Gewicht, mit dem die Technik sauber ist und du noch 3+ Wdh übrig hättest. Lieber zu leicht.')+burn;
  const top=ex.reps[1],bot=ex.reps[0],reps=l.sets.map(s=>s.r||0);
  const last='Letztes Mal ('+fmtDate(l.date)+'): '+l.sets.map(s=>fmtSet(ex,s)).join(', ')+(l.effort?' · '+l.effort:'');
  const drop=ex.wt==='num'&&l.sets.some((s,i)=>i>0&&s.w!=null&&s.w===l.sets[i-1].w&&((l.sets[i-1].r||0)-(s.r||0))>=3);
  let adv;
- if(drop)adv='⬇️ Ein Satz ist um 3+ Wdh abgefallen – der Satz davor war zu schwer. Heute 1–2 Gewichtsstufen leichter, sodass alle Sätze ähnlich viele Wdh schaffen.';
- else if(reps.every(r=>r>=top)&&l.effort!=='hart')adv=ex.wt==='num'?'⬆️ Alle Sätze am oberen Ende: heute den kleinsten Gewichtsschritt nach oben.':(ex.wt==='text'?'⬆️ Alle Sätze am oberen Ende: heute weniger Hilfe bzw. stärkeres Band.':'⬆️ Alle Sätze am oberen Ende: nimm die schwerere Variante (siehe Anleitung).');
+ if(drop&&l.effort==='hart')adv='↔️ Ein Satz ist um 3+ Wdh abgefallen, weil du zu nah ans Versagen gegangen bist. Heute gleiches Gewicht, aber jeden Satz mit 2 Wdh Reserve beenden – dann bleiben die Sätze gleichmäßig.';
+ else if(drop)adv='⬇️ Ein Satz ist um 3+ Wdh abgefallen – der Satz davor war zu schwer. Heute 1–2 Gewichtsstufen leichter, sodass alle Sätze ähnlich viele Wdh schaffen.';
+ else if(reps.every(r=>r>=top)&&l.effort!=='hart')adv=ex.wt==='num'?'⬆️ Alle Sätze am oberen Ende: heute den kleinsten Gewichtsschritt nach oben (nur einen).':(ex.wt==='text'?'⬆️ Alle Sätze am oberen Ende: heute weniger Hilfe bzw. stärkeres Band.':'⬆️ Alle Sätze am oberen Ende: nimm die schwerere Variante (siehe Anleitung).');
  else if(l.effort==='hart'&&reps.some(r=>r<bot))adv='↔️ War sehr hart: Gewicht halten, auf saubere Technik achten.';
  else adv='➡️ Gleiches Gewicht, versuch 1 Wiederholung mehr.';
- return last+'<br>'+adv}
+ const warn=(ex.big&&l.effort==='hart')?'<br>⚠️ Letztes Mal „hart" – bei dieser Übung nie bis zum Versagen: Satz beenden, wenn noch 2 gehen würden.':'';
+ return last+'<br>'+adv+warn+burn}
 function weeklyAvgs(){const m={};data.weights.forEach(x=>{const w=weekOf(x.date);(m[w]=m[w]||[]).push(x.kg)});return Object.keys(m).map(Number).sort((a,b)=>a-b).map(w=>({w,avg:m[w].reduce((a,b)=>a+b,0)/m[w].length,n:m[w].length}))}
 function dailyCounts(w){const r={kreatin:0,shake:0,spaet:0,haltung:0};Object.keys(data.daily).forEach(k=>{if(weekOf(k)!==w)return;const o=data.daily[k];Object.keys(r).forEach(x=>{if(o[x])r[x]++})});return r}
 function curCW(){return checkinWeek!==null?checkinWeek:weekOf(today())}
@@ -414,14 +430,14 @@ function rHome(){const t=today(),w=weekOf(t),dow=new Date().getDay();
  const key=DAYPLAN[dow];
  h+=`<div class="card"><div class="mut">${phase(w)}</div>`;
  if(w===0)h+=`<h2 style="margin-top:8px">Vorbereitung</h2><p>Bis zum Start: eine ganz leichte Technik-Session mit den neuen Übungen. Kein Muskelkater vor Montag! Mach außerdem deine Startfotos (siehe Check-in).</p>`;
- if(key){const S=SESSIONS[key];h+=`<h2 style="margin-top:8px">Plan heute: ${S.name}</h2><div class="mut">${S.focus}</div>`+(S.swim?`<button class="btn pri" data-act="start" data-k="${key}">Schwimmen eintragen</button>`:`<button class="btn pri" data-act="start" data-k="${key}">Training starten</button><button class="btn" data-act="start" data-k="${key}" data-short="1">Kurzversion (ca. 20 min)</button>`)}
- else h+=`<h2 style="margin-top:8px">Ruhetag 😴</h2><div class="mut">Muskeln wachsen in der Pause. Iss gut, denk an Kreatin und die Spätmahlzeit.</div>`;
+ if(key){const S=SESSIONS[key];h+=`<h2 style="margin-top:8px">Plan heute: ${S.name}</h2><div class="mut">${S.focus}</div>`+(S.swim?`<button class="btn pri" data-act="start" data-k="${key}">${S.name} eintragen</button>`+(key==='SWIM'?`<button class="btn" data-act="start" data-k="RUN">Stattdessen Laufen eintragen</button>`:''):`<button class="btn pri" data-act="start" data-k="${key}">Training starten</button><button class="btn" data-act="start" data-k="${key}" data-short="1">Kurzversion (ca. 20 min)</button>`)}
+ else h+=`<h2 style="margin-top:8px">Ruhetag 😴</h2><div class="mut">Muskeln wachsen in der Pause. Protein nicht vergessen, Kreatin nehmen – Spätmahlzeit heute nur klein und nur bei Hunger.</div>`;
  if(dow===0)h+=`<div class="hint">📝 Sonntag ist Check-in-Tag: Check-in ausfüllen, dann Daten exportieren.</div>`;
  h+='</div>';
  const dl=data.daily[t]||{};
  h+=`<div class="card"><h2>Heute erledigt?</h2>${DAILY.map(x=>`<div class="chk"><div class="box ${dl[x.id]?'on':''}" data-act="daily" data-id="${x.id}">${dl[x.id]?'✓':''}</div><div><b>${x.name}</b><div class="mut">${x.sub}</div></div></div>`).join('')}</div>`;
- const ws=data.sessions.filter(s=>weekOf(s.date)===w),str=ws.filter(s=>s.type!=='SWIM').length,sw=ws.filter(s=>s.type==='SWIM').length;
- h+=`<div class="card"><h2>Diese Woche</h2><div>${str} von 4 Krafteinheiten ${str>=3?'✅':''} · Schwimmen: ${sw}</div><div class="mut">3 von 4 = erfolgreiche Woche.</div>${ws.map(s=>`<span class="pill">${fmtDate(s.date)} ${esc(s.name)}</span>`).join('')}</div>`;
+ const ws=data.sessions.filter(s=>weekOf(s.date)===w),str=ws.filter(s=>!isCardio(s)).length,cd=ws.filter(isCardio).length;
+ h+=`<div class="card"><h2>Diese Woche</h2><div>${str} von 4 Krafteinheiten ${str>=3?'✅':''} · Ausdauer: ${cd}</div><div class="mut">3 von 4 = erfolgreiche Woche.</div>${ws.map(s=>`<span class="pill">${fmtDate(s.date)} ${esc(s.name)}</span>`).join('')}</div>`;
  h+=`<div class="card"><h2>Andere Einheit wählen</h2><div class="mut">Für verschobene Tage, Reisewochen oder das Hotel.</div>${Object.keys(SESSIONS).map(k=>`<button class="btn" data-act="start" data-k="${k}">${SESSIONS[k].name}</button>`).join('')}</div>`;
  app.innerHTML=h}
 
@@ -432,19 +448,19 @@ function mealsFor(dow){const ty=dayType(dow),S=SESSIONS[DAYPLAN[dow]],L=[],shake
  if(ty==='am'){L.push(['ca. 10:00','🏋️ Training',S.name,1]);L.push(shake)}
  L.push(['12:00','Mensa Mittag','2 Proteinportionen (Fleisch, Tofu oder 番茄炒蛋), Gemüse, Reis nach Hunger.']);
  if(ty==='pm'){L.push(['ca. 14:45','Snack vor dem Training','Banane, Joghurt oder ein Baozi.']);L.push([dow===2?'15:30':'15:00','🏋️ Training',S.name,1]);L.push(shake)}
- if(dow===0)L.push(['nachmittags','🏊 Schwimmen','Locker, danach Check-in.',1]);
- L.push(['18:00','Mensa Abend','Wie mittags. Eine zweite Portion to go für später mitnehmen.'+(dow===3?' Heute Vorlesung bis 21 Uhr – Spätmahlzeit unbedingt mitnehmen.':'')]);
- L.push(['ca. 21:00–21:30','Spätmahlzeit',ty==='rest'?'Mensa-Portion to go oder Joghurt mit Haferflocken – oder heute den Shake (Whey mit Milch).':'Mensa-Portion to go oder Joghurt mit Haferflocken.']);
+ if(dow===0)L.push(['nachmittags','🏊 Schwimmen oder 🏃 Laufen','Locker, 25–35 min, danach Check-in. Laufen erst, wenn der Rücken schmerzfrei ist.',1]);
+ L.push(['18:00','Mensa Abend',ty==='rest'?'Wie mittags.'+(dow===3?' Heute Vorlesung bis 21 Uhr.':''):'Wie mittags. Eine zweite Portion to go für später mitnehmen.']);
+ L.push(['ca. 21:00–21:30','Spätmahlzeit',ty==='rest'?'Nur bei Hunger und klein: Joghurt mit etwas Haferflocken oder ein Shake (Whey mit Milch). Kein zweites Mensa-Essen.':'Mensa-Portion to go oder Joghurt mit Haferflocken.']);
  return L}
 function rPlan(){const td=new Date().getDay(),d=planDay===null?td:planDay;setHead('Plan','Ernährung pro Tag · Training pro Woche');
  let h=`<div class="card"><h2>🍽️ Ernährung</h2><div class="seg">${[1,2,3,4,5,6,0].map(n=>`<button class="${n===d?'on':''}" data-act="pday" data-v="${n}">${DN[n]}</button>`).join('')}</div><div class="mut" style="margin-top:8px">${d===td?'Heute':DN[d]} · ${dayType(d)==='rest'?'Ruhetag':'Trainingstag'}</div>`;
  h+=mealsFor(d).map(m=>`<div class="tl${m[3]?' tr':''}"><div class="mut">${m[0]}</div><div><b>${m[1]}</b><div class="mut">${m[2]}</div></div></div>`).join('');
- h+=`<h3>Grundregeln</h3><ul><li>2 Proteinportionen bei jeder Mensa-Mahlzeit.</li><li>Nie hungrig ins Bett – die Spätmahlzeit ist dein wichtigster Hebel zum Zunehmen.</li><li>Kreatin jeden Tag, egal wann.</li><li>Die Waage entscheidet: Steigt der Wochenschnitt 2 Wochen lang um weniger als 0,2 kg, kommt ein Snack dazu.</li></ul></div>`;
- h+=`<div class="card"><h2>🏋️ Training pro Woche</h2><div class="mut">Woche 1–2: nur 2 Sätze pro Übung, bewusst leicht. Tipp auf eine Übung für die Anleitung.</div></div>`;
+ h+=`<h3>Grundregeln</h3><ul><li>2 Proteinportionen bei jeder Mensa-Mahlzeit – Protein (140–170 g) wird nie gekürzt.</li><li>Nie hungrig ins Bett – an Ruhetagen aber nur eine kleine Spätmahlzeit (Joghurt oder Shake).</li><li>Kreatin jeden Tag, egal wann.</li><li>Die Taille entscheidet, nicht die Waage: höchstens +1 cm in 12 Wochen. Bis zum Check-in in Woche 4 (8.11.) kein Extra-Snack.</li></ul></div>`;
+ h+=`<div class="card"><h2>🏋️ Training pro Woche</h2><div class="mut">Ab Woche 3: 3 Sätze pro Übung. „Passend" statt „hart", höchstens ein Gewichtsschritt pro Einheit. Tipp auf eine Übung für die Anleitung.</div></div>`;
  WEEK.forEach(([dw,time])=>{const k=DAYPLAN[dw],S=k?SESSIONS[k]:null;
   h+=`<div class="card${dw===td?' today':''}"><div class="exhead"><h2>${DN[dw]} · ${S?S.name:'Ruhetag'}</h2>${dw===td?'<span class="pill" style="color:var(--acc)">heute</span>':''}</div><div class="mut">${time}${S&&!S.swim?' · '+S.focus:''}</div>`;
-  if(S&&S.ex)h+=S.ex.map(id=>`<div class="exl" data-act="info" data-id="${id}"><span>${EX[id].name}</span><span class="mut">${EX[id].sets}×${EX[id].reps[0]}–${EX[id].reps[1]} ${EX[id].rl} ›</span></div>`).join('');
-  if(S&&S.swim)h+=`<div class="mut" style="margin-top:6px">${S.focus}.</div>`;
+  if(S&&S.ex)h+=S.ex.map(id=>`<div class="exl" data-act="info" data-id="${id}"><span>${EX[id].name}${S.opt&&S.opt.includes(id)?' <span class="mut">(optional)</span>':''}</span><span class="mut">${EX[id].sets}×${EX[id].reps[0]}–${EX[id].reps[1]} ${EX[id].rl} ›</span></div>`).join('');
+  if(S&&S.swim)h+=`<div class="mut" style="margin-top:6px">${S.focus}. Alternativ: lockerer Lauf 25–35 min (erst, wenn der Rücken schmerzfrei ist).</div>`;
   h+='</div>'});
  h+=`<div class="card"><h2>✈️ Reisewoche</h2><div class="mut">Di und Do je „Ganzkörper (Reisewoche)", unterwegs „Hotel-Workout". Beides unter Heute → Andere Einheit wählen.</div></div>`;
  app.innerHTML=h}
@@ -463,8 +479,8 @@ function rWorkout(){const d=data.draft;if(!d){go('home');return}const S=SESSIONS
  setHead(S.name+(d.short?' · Kurz':''),fmtDate(d.date)+' · Woche '+weekOf(d.date));
  if(d.swim){rSwim(d,S);return}
  let h=`<div class="card"><h2>Aufwärmen</h2><div class="mut">Ca. 10–15 min. Tippe auf den Namen für die Anleitung.</div>${S.warm.map(id=>chkRow(id,WARM[id],d.warm[id])).join('')}</div>`;
- d.ex.forEach((e,i)=>{const ex=EX[e.id];
-  h+=`<div class="card"><div class="exhead"><div><h2>${ex.name}</h2><div class="mut">${e.sets.length} × ${ex.reps[0]}–${ex.reps[1]} ${ex.rl} · Pause ${ex.rest} s</div></div><button class="btn sm" data-act="info" data-id="${e.id}">Anleitung</button></div><div class="hint">${hint(e.id)}</div>`;
+ d.ex.forEach((e,i)=>{const ex=EX[e.id],opt=S.opt&&S.opt.includes(e.id);
+  h+=`<div class="card"><div class="exhead"><div><h2>${ex.name}</h2><div class="mut">${opt?'Optional · ':''}${e.sets.length} × ${ex.reps[0]}–${ex.reps[1]} ${ex.rl} · Pause ${ex.rest} s</div></div><button class="btn sm" data-act="info" data-id="${e.id}">Anleitung</button></div><div class="hint">${hint(e.id)}</div>`;
   h+=`<div class="set"><div class="mut">Satz</div><div class="mut" style="text-align:center">${ex.wl}</div><div class="mut" style="text-align:center">${ex.rl}</div><div></div></div>`;
   e.sets.forEach((s,j)=>{h+=`<div class="set ${s.done?'done':''}" id="s${i}_${j}"><div class="mut">${j+1}</div>${ex.wt==='none'?'<div class="mut" style="text-align:center">–</div>':`<input ${ex.wt==='num'?'inputmode="decimal" placeholder="kg"':'placeholder="z. B. Band lila"'} data-f="w" data-e="${i}" data-s="${j}" value="${esc(s.w)}">`}<input inputmode="numeric" data-f="r" data-e="${i}" data-s="${j}" value="${esc(s.r)}" placeholder="${ex.reps[0]}–${ex.reps[1]}"><button class="ok" data-act="done" data-e="${i}" data-s="${j}">✓</button></div>`});
   h+=`<div class="row" style="justify-content:space-between;margin-top:4px"><button class="btn sm" data-act="addset" data-e="${i}">+ Satz</button><button class="btn sm" data-act="timer" data-sec="${ex.rest}">⏱ Pause ${ex.rest} s</button></div>`;
@@ -473,10 +489,10 @@ function rWorkout(){const d=data.draft;if(!d){go('home');return}const S=SESSIONS
  h+=`<div class="card"><h2>Notizen</h2><div class="mut">Schmerzen, Gefühl, Fragen an den Coach</div><textarea data-f="notes">${esc(d.notes)}</textarea><button class="btn pri" data-act="finish">Training speichern</button><button class="btn dng" data-act="cancel">Training verwerfen</button></div>`;
  app.innerHTML=h}
 
-function rSwim(d,S){app.innerHTML=`<div class="card"><h2>Schwimmen</h2><div class="mut">${S.focus}. Starte parallel die Garmin-Aktivität „Schwimmbad".</div><div class="grid2"><div><label class="f">Dauer (min)</label><input class="t" inputmode="numeric" data-f="min" value="${esc(d.min)}"></div><div><label class="f">Strecke (m, optional)</label><input class="t" inputmode="numeric" data-f="dist" value="${esc(d.dist)}"></div></div><label class="f">Gefühl</label><div class="seg">${['locker','mittel','hart'].map(k=>`<button class="${d.feel===k?'on':''}" data-act="feel" data-v="${k}">${k}</button>`).join('')}</div><label class="f">Notizen</label><textarea data-f="notes">${esc(d.notes)}</textarea><button class="btn pri" data-act="finish">Speichern</button><button class="btn dng" data-act="cancel">Verwerfen</button></div>`}
+function rSwim(d,S){app.innerHTML=`<div class="card"><h2>${S.name}</h2><div class="mut">${S.focus}. Starte parallel die Garmin-Aktivität „${S.garmin}".</div><div class="grid2"><div><label class="f">Dauer (min)</label><input class="t" inputmode="numeric" data-f="min" value="${esc(d.min)}"></div><div><label class="f">Strecke (${S.dist}, optional)</label><input class="t" inputmode="decimal" data-f="dist" value="${esc(d.dist)}"></div></div><label class="f">Gefühl</label><div class="seg">${['locker','mittel','hart'].map(k=>`<button class="${d.feel===k?'on':''}" data-act="feel" data-v="${k}">${k}</button>`).join('')}</div><label class="f">Notizen</label><textarea data-f="notes">${esc(d.notes)}</textarea><button class="btn pri" data-act="finish">Speichern</button><button class="btn dng" data-act="cancel">Verwerfen</button></div>`}
 
 function finish(){const d=data.draft,S=SESSIONS[d.key];
- if(d.swim){data.sessions.push({id:'s'+Date.now(),type:'SWIM',name:S.name,date:d.date,week:weekOf(d.date),durationMin:num(d.min),distanceM:num(d.dist),feel:d.feel||null,notes:d.notes});data.draft=null;save();alert('Gespeichert 🏊');go('home');return}
+ if(d.swim){const dv=num(d.dist),dm=dv===null?null:(S.dist==='km'?Math.round(dv*1000):dv);data.sessions.push({id:'s'+Date.now(),type:d.key,name:S.name,date:d.date,week:weekOf(d.date),durationMin:num(d.min),distanceM:dm,feel:d.feel||null,notes:d.notes});data.draft=null;save();alert('Gespeichert '+(d.key==='RUN'?'🏃':'🏊'));go('home');return}
  const exs=d.ex.map(e=>{const ex=EX[e.id];return {id:e.id,name:ex.name,unit:ex.wl,sets:e.sets.filter(s=>s.done).map(s=>({w:ex.wt==='num'?num(s.w):(ex.wt==='text'?s.w:null),r:num(s.r)})),effort:e.effort||null}}).filter(e=>e.sets.length);
  if(!exs.length&&!confirm('Kein Satz abgehakt. Trotzdem speichern?'))return;
  const dur=Math.round((Date.now()-d.start)/60000);
@@ -489,13 +505,13 @@ function warmBody(id){const w=WARM[id];return `<span class="pill">${w.dose}</spa
 function rLib(){setHead('Übungen','Vor dem Training kurz anschauen');
  let h=`<details><summary>🛡️ Grundregeln für sicheres Training</summary>${RULES.map(r=>`<h3>${r[0]}</h3><div>${r[1]}</div>`).join('')}</details>`;
  h+=`<details><summary>🔥 Aufwärmen & Dehnen</summary>${Object.keys(WARM).map(id=>`<h3>${WARM[id].name}</h3>${warmBody(id)}`).join('')}</details>`;
- ['OKA','UKA','OKB','UKB','HOTEL'].forEach(k=>{const S=SESSIONS[k];h+=`<div class="mut" style="margin:14px 4px 6px">${S.name} · ${S.focus}</div>`+S.ex.map(id=>`<details><summary>${EX[id].name} <span class="mut">${EX[id].sets}×${EX[id].reps[0]}–${EX[id].reps[1]}</span></summary>${exBody(id)}</details>`).join('')});
+ ['OKA','UKA','OKB','UKB','HOTEL'].forEach(k=>{const S=SESSIONS[k];h+=`<div class="mut" style="margin:14px 4px 6px">${S.name} · ${S.focus}</div>`+S.ex.map(id=>`<details><summary>${EX[id].name} <span class="mut">${EX[id].sets}×${EX[id].reps[0]}–${EX[id].reps[1]}${S.opt&&S.opt.includes(id)?' · optional':''}</span></summary>${exBody(id)}</details>`).join('')});
  app.innerHTML=h}
 
 function spark(wk){if(wk.length<2)return '';const W=300,H=80,p=8,v=wk.map(x=>x.avg),mn=Math.min(...v)-0.3,mx=Math.max(...v)+0.3;const pts=wk.map((x,i)=>[p+i*(W-2*p)/(wk.length-1),H-p-(x.avg-mn)/(mx-mn)*(H-2*p)]);return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;margin-bottom:8px"><polyline fill="none" stroke="#4ade80" stroke-width="2.5" points="${pts.map(q=>q.join(',')).join(' ')}"/>${pts.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="3.5" fill="#4ade80"/>`).join('')}</svg>`}
 function rWeight(){setHead('Gewicht','Morgens, nach der Toilette, vor dem Frühstück');const wk=weeklyAvgs();
  let h=`<div class="card"><h2>Gewicht eintragen</h2><div class="grid2"><div><label class="f">Datum</label><input class="t" type="date" id="wd" value="${today()}"></div><div><label class="f">kg</label><input class="t" id="wkg" inputmode="decimal" placeholder="81,0"></div></div><button class="btn pri" data-act="wsave">Speichern</button><div class="mut" style="margin-top:8px">3–4× pro Woche reicht. Nur der Wochenschnitt zählt – Schwankungen von ±1 kg pro Tag sind normal.</div></div>`;
- h+=`<div class="card"><h2>Wochenschnitt</h2>${spark(wk)}<table><tr><th>Woche</th><th>Ø kg</th><th>Δ</th><th>n</th></tr>${wk.slice().reverse().map((x,i,a)=>{const pr=a[i+1],dl=pr?x.avg-pr.avg:null;return `<tr><td>${x.w===0?'Vor Start':'W'+x.w}</td><td>${x.avg.toFixed(1)}</td><td>${dl===null?'–':(dl>0?'+':'')+dl.toFixed(1)}</td><td>${x.n}</td></tr>`}).join('')}</table><div class="mut">Ziel: ca. +0,25 bis +0,4 kg pro Woche.</div></div>`;
+ h+=`<div class="card"><h2>Wochenschnitt</h2>${spark(wk)}<table><tr><th>Woche</th><th>Ø kg</th><th>Δ</th><th>n</th></tr>${wk.slice().reverse().map((x,i,a)=>{const pr=a[i+1],dl=pr?x.avg-pr.avg:null;return `<tr><td>${x.w===0?'Vor Start':'W'+x.w}</td><td>${x.avg.toFixed(1)}</td><td>${dl===null?'–':(dl>0?'+':'')+dl.toFixed(1)}</td><td>${x.n}</td></tr>`}).join('')}</table><div class="mut">Bis ca. 7.11. lagert das Kreatin noch Wasser ein. Der Wochenschnitt von Woche 4 ist die neue Basis. Wichtiger als die Waage: die Taille (höchstens +1 cm in 12 Wochen).</div></div>`;
  const last=data.weights.slice().sort((a,b)=>a.date<b.date?1:-1).slice(0,14);
  h+=`<div class="card"><h2>Letzte Einträge</h2>${last.map(x=>`<div class="row" style="justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)"><span>${fmtDate(x.date)}: <b>${x.kg.toFixed(1)} kg</b></span><button class="btn sm" data-act="wdel" data-d="${x.date}">✕</button></div>`).join('')||'<div class="mut">Noch keine Einträge.</div>'}</div>`;
  app.innerHTML=h}
@@ -503,12 +519,12 @@ function rWeight(){setHead('Gewicht','Morgens, nach der Toilette, vor dem Frühs
 function fld(k,label,v){return `<div><label class="f">${label}</label><input class="t" id="c_${k}" inputmode="decimal" value="${v==null?'':esc(v)}"></div>`}
 function scale(k,label,v){return `<label class="f">${label}</label><div class="seg">${[1,2,3,4,5].map(n=>`<button class="${v===n?'on':''}" data-act="scale" data-k="${k}" data-v="${n}">${n}</button>`).join('')}</div>`}
 function rCheckin(){const w=curCW();setHead('Check-in','Jeden Sonntag · danach exportieren');
- const c=data.checkins.find(x=>x.week===w)||{},ws=data.sessions.filter(s=>weekOf(s.date)===w),str=ws.filter(s=>s.type!=='SWIM').length,sw=ws.filter(s=>s.type==='SWIM').length;
+ const c=data.checkins.find(x=>x.week===w)||{},ws=data.sessions.filter(s=>weekOf(s.date)===w),str=ws.filter(s=>!isCardio(s)).length,sw=ws.filter(s=>s.type==='SWIM').length,rn=ws.filter(s=>s.type==='RUN').length;
  const wk=weeklyAvgs(),cur=wk.find(x=>x.w===w),prev=wk.find(x=>x.w===w-1),dc=dailyCounts(w),due=[0,1,4,8,12].includes(w);
- let h=`<div class="card"><div class="row"><button class="btn sm" data-act="cw" data-v="-1">‹</button><div style="flex:1;text-align:center;font-weight:700">${w===0?'Vor Start':'Woche '+w}</div><button class="btn sm" data-act="cw" data-v="1">›</button></div><h3>Automatisch erfasst</h3><div>Krafteinheiten: <b>${str}/4</b> · Schwimmen: <b>${sw}</b></div><div>Ø Gewicht: <b>${cur?cur.avg.toFixed(1)+' kg':'–'}</b>${cur&&prev?' ('+(cur.avg-prev.avg>0?'+':'')+(cur.avg-prev.avg).toFixed(1)+' kg)':''}</div><div class="mut">Kreatin ${dc.kreatin}/7 · Shake ${dc.shake}/7 · Spätmahlzeit ${dc.spaet}/7 · Haltung ${dc.haltung}/7</div></div>`;
+ let h=`<div class="card"><div class="row"><button class="btn sm" data-act="cw" data-v="-1">‹</button><div style="flex:1;text-align:center;font-weight:700">${w===0?'Vor Start':'Woche '+w}</div><button class="btn sm" data-act="cw" data-v="1">›</button></div><h3>Automatisch erfasst</h3><div>Krafteinheiten: <b>${str}/4</b> · Schwimmen: <b>${sw}</b> · Laufen: <b>${rn}</b></div><div>Ø Gewicht: <b>${cur?cur.avg.toFixed(1)+' kg':'–'}</b>${cur&&prev?' ('+(cur.avg-prev.avg>0?'+':'')+(cur.avg-prev.avg).toFixed(1)+' kg)':''}</div><div class="mut">Kreatin ${dc.kreatin}/7 · Shake ${dc.shake}/7 · Spätmahlzeit ${dc.spaet}/7 · Haltung ${dc.haltung}/7</div></div>`;
  h+=`<div class="card"><h2>Garmin (Wochenschnitt)</h2><div class="mut">Garmin Connect → Gesundheitsstatistiken → 7-Tage-Durchschnitt</div><div class="grid2">${fld('hrv','HRV Ø (ms)',c.hrv)}${fld('sleep','Schlaf Ø (h)',c.sleep)}${fld('rhr','Ruhepuls Ø',c.rhr)}${fld('steps','Schritte Ø',c.steps)}</div></div>`;
  h+=`<div class="card"><h2>Wie war die Woche? (1–5)</h2>${scale('energy','Energie',c.energy)}${scale('appetite','Essen geschafft / Appetit',c.appetite)}${scale('motivation','Spaß / Motivation',c.motivation)}${scale('posture','Haltung im Alltag',c.posture)}${scale('soreness','Muskelkater / Erschöpfung (5 = stark)',c.soreness)}</div>`;
- h+=`<div class="card"><h2>Fotos & Maße ${due?'<span class="pill" style="color:#fbbf24">diese Woche fällig</span>':''}</h2><div class="mut">Start, W4, W8, W12. Morgens, gleiches Licht, Handy auf Hüfthöhe: vorn, seitlich, hinten – jeweils entspannt (vorher auf der Stelle gehen, ausatmen, Arme hängen lassen) und bewusst aufgerichtet. Dazu ein 15-min-Schreibtischvideo von der Seite, Standbild bei Minute 10.</div><div class="chk"><div class="box ${c.photos?'on':''}" data-act="ctoggle" data-id="photos">${c.photos?'✓':''}</div><div>Fotos gemacht</div></div><div class="chk"><div class="box ${c.deskvideo?'on':''}" data-act="ctoggle" data-id="deskvideo">${c.deskvideo?'✓':''}</div><div>Schreibtischvideo gemacht</div></div><div class="grid2">${fld('chest','Brust (cm)',c.chest)}${fld('arm','Oberarm angespannt (cm)',c.arm)}${fld('waist','Taille, Nabelhöhe (cm)',c.waist)}</div></div>`;
+ h+=`<div class="card"><h2>Fotos & Maße ${due?'<span class="pill" style="color:#fbbf24">diese Woche fällig</span>':''}</h2><div class="mut">Start, W4, W8, W12. Morgens, gleiches Licht, Handy auf Hüfthöhe: vorn, seitlich, hinten – jeweils entspannt (vorher auf der Stelle gehen, ausatmen, Arme hängen lassen) und bewusst aufgerichtet. Dazu ein 15-min-Schreibtischvideo von der Seite, Standbild bei Minute 10, und ein Liegestütz-Test (so viele saubere wie möglich). Die <b>Taille</b> darfst du jede Woche messen – sie ist dein wichtigster Wert.</div><div class="chk"><div class="box ${c.photos?'on':''}" data-act="ctoggle" data-id="photos">${c.photos?'✓':''}</div><div>Fotos gemacht</div></div><div class="chk"><div class="box ${c.deskvideo?'on':''}" data-act="ctoggle" data-id="deskvideo">${c.deskvideo?'✓':''}</div><div>Schreibtischvideo gemacht</div></div><div class="grid2">${fld('chest','Brust (cm)',c.chest)}${fld('arm','Oberarm locker hängend (cm)',c.arm)}${fld('waist','Taille, Nabelhöhe (cm)',c.waist)}${fld('pushups','Liegestütze (max. sauber)',c.pushups)}</div></div>`;
  h+=`<div class="card"><h2>Notizen & Fragen</h2><label class="f">Beschwerden / Schmerzen</label><textarea id="c_pain">${esc(c.pain)}</textarea><label class="f">Was lief gut, was nicht? Fragen an den Coach</label><textarea id="c_notes">${esc(c.notes)}</textarea><label class="f">Reisen / Termine in den nächsten 2 Wochen</label><textarea id="c_travel">${esc(c.travel)}</textarea><button class="btn pri" data-act="csave">Check-in speichern</button><button class="btn" data-act="tab" data-v="data">Weiter zum Export →</button></div>`;
  app.innerHTML=h}
 
@@ -519,7 +535,7 @@ function rData(){setHead('Daten','Alles bleibt auf diesem Handy');
  <div class="card"><button class="btn dng" data-act="reset">Alle Daten löschen</button></div>`}
 
 function exportObj(){const d=Object.assign({},data);delete d.draft;
- const plan={};Object.keys(SESSIONS).forEach(k=>{const s=SESSIONS[k];plan[k]={name:s.name,exercises:(s.ex||[]).map(id=>EX[id].name+' ('+EX[id].sets+'×'+EX[id].reps.join('–')+' '+EX[id].rl+')')}});
+ const plan={};Object.keys(SESSIONS).forEach(k=>{const s=SESSIONS[k];plan[k]={name:s.name,exercises:(s.ex||[]).map(id=>EX[id].name+' ('+((s.sets&&s.sets[id])||EX[id].sets)+'×'+EX[id].reps.join('–')+' '+EX[id].rl+')'+(s.opt&&s.opt.includes(id)?' optional':''))}});
  return {app:'Trainings-App Peking',appVersion:APP_VERSION,exportedAt:new Date().toISOString(),currentWeek:weekOf(today()),plan,data:d}}
 async function exportData(){const json=JSON.stringify(exportObj(),null,1),name='training-export-'+today()+'.json';
  for(const type of ['application/json','text/plain']){try{const f=new File([json],name,{type});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:name});return}}catch(e){if(e.name==='AbortError')return}}
@@ -563,7 +579,7 @@ document.addEventListener('click',ev=>{
   case 'cw':checkinWeek=Math.max(0,curCW()+(+t.dataset.v));rCheckin();break;
   case 'scale':{const c=getCheckin(curCW());c[t.dataset.k]=+t.dataset.v;save();segOn();break}
   case 'ctoggle':{const c=getCheckin(curCW());c[t.dataset.id]=!c[t.dataset.id];save();t.classList.toggle('on',c[t.dataset.id]);t.textContent=c[t.dataset.id]?'✓':'';break}
-  case 'csave':{const w=curCW(),c=getCheckin(w);['hrv','sleep','rhr','steps','chest','arm','waist'].forEach(k=>{const el=document.getElementById('c_'+k);if(el)c[k]=num(el.value)});['pain','notes','travel'].forEach(k=>{c[k]=document.getElementById('c_'+k).value});const wk=weeklyAvgs().find(x=>x.w===w),ws=data.sessions.filter(s=>weekOf(s.date)===w);c.auto={strengthSessions:ws.filter(s=>s.type!=='SWIM').length,swims:ws.filter(s=>s.type==='SWIM').length,avgWeight:wk?+wk.avg.toFixed(2):null,daily:dailyCounts(w)};c.savedAt=new Date().toISOString();save();alert('Check-in gespeichert ✅ Jetzt exportieren.');break}
+  case 'csave':{const w=curCW(),c=getCheckin(w);['hrv','sleep','rhr','steps','chest','arm','waist','pushups'].forEach(k=>{const el=document.getElementById('c_'+k);if(el)c[k]=num(el.value)});['pain','notes','travel'].forEach(k=>{c[k]=document.getElementById('c_'+k).value});const wk=weeklyAvgs().find(x=>x.w===w),ws=data.sessions.filter(s=>weekOf(s.date)===w);c.auto={strengthSessions:ws.filter(s=>!isCardio(s)).length,swims:ws.filter(s=>s.type==='SWIM').length,runs:ws.filter(s=>s.type==='RUN').length,avgWeight:wk?+wk.avg.toFixed(2):null,daily:dailyCounts(w)};c.savedAt=new Date().toISOString();save();alert('Check-in gespeichert ✅ Jetzt exportieren.');break}
   case 'tab':checkinWeek=null;go(t.dataset.v);break;
   case 'export':exportData();break;
   case 'copy':copyData();break;
